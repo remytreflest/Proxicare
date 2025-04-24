@@ -1,9 +1,9 @@
 # FRONT : Angular
 /angular-qrcode/dist
 /angular-qrcode/node_modules
-/angular-qrcode/.angular/cache/
+/angular-qrcode/.angular/cache
 
 # BACK : API
-/nodejs-api/node_modules/
+/nodejs-api/node_modules
 /nodejs-api/.env
-/nodejs-api/dist/
+/nodejs-api/dist
