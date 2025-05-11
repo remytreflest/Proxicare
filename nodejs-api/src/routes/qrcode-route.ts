@@ -1,8 +1,11 @@
+/*
+    PROVISOIRE ET INUTILISABLE (MOCK DONNEES)
+*/
+
 import { Router } from 'express';
 import QRCode from 'qrcode';
 import { v4 as uuidv4 } from 'uuid';
 
-const pool = require("../src/db");
 const router = Router();
 
 router.get('/qrcode', async (req, res) => {

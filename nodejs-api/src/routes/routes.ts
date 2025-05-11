@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import qrcodeRoutes from './qrcode-route';
-import usersRoutes from './users-route';
+import registerRoutes from './registration-route';
 
 const router = Router();
 
+router.use(registerRoutes);
 router.use(qrcodeRoutes);
-router.use(usersRoutes);
 
 export default router;
