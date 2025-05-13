@@ -1,8 +1,8 @@
-import Patient from './Patient';
-import User from './User';
-import Appointment from './Appointment';
-import HealthcareProfessional from './HealthcareProfessional';
-import HealthcareAct from './HealthcareAct';
+import Patient from '../Patient';
+import User from '../User';
+import Appointment from '../Appointment';
+import HealthcareProfessional from '../HealthcareProfessional';
+import HealthcareAct from '../HealthcareAct';
 
 // Relations
 User.hasOne(Patient, { foreignKey: 'UserId' });
@@ -17,11 +17,11 @@ HealthcareProfessional.hasMany(Appointment, { foreignKey: 'HealthcareProfessiona
 HealthcareAct.hasMany(Appointment, { foreignKey: 'HealthcareActId' });
 
 // Association en acte de soins et professionnel
+// Chaque professionnel doit pouvoir s'associer à des soins
 HealthcareProfessional.belongsToMany(HealthcareAct, {
   through: 'HealthcareProfessionalHealthcareAct',
   foreignKey: 'HealthcareProfessionalId',
 });
-
 HealthcareAct.belongsToMany(HealthcareProfessional, {
   through: 'HealthcareProfessionalHealthcareAct',
   foreignKey: 'HealthcareActId',

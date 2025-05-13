@@ -1,12 +1,13 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
+import { AppointmentsStatusEnum } from '../resources/emuns/appointmentsStatus';
 
 class Appointment extends Model {
   public Id!: number;
   public PatientId!: number;
   public HealthcareProfessionalId!: number;
   public HealthcareActId!: number;
-  public Status!: string;
+  public Status!: AppointmentsStatusEnum;
   public AppointmentStartDate!: Date;
   public AppointmentEndDate!: Date;
   public CreatedAt!: Date;
@@ -32,7 +33,7 @@ Appointment.init({
     allowNull: false,
   },
   Status: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.ENUM(...Object.values(AppointmentsStatusEnum)),
     allowNull: false,
   },
   AppointmentStartDate: {

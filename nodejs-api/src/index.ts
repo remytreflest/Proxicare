@@ -1,9 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import morgan from 'morgan';
-import routes from './routes/routes';
-import checkJwt from '../expressjwt.config';
+import routes from './routes/base/routes';
+import checkJwt from './middlewares/expressjwt.config';
+import { extractUserId } from './middlewares/extractUserId';
 
 // Load environment variables
 dotenv.config();
@@ -19,13 +19,13 @@ app.use(cors({
   origin: process.env.API_CORS || 'http://localhost:4200',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-UserId'],
 }));
   
-app.use(morgan('dev'));
-
+// SECURITE : Permet l'accès à l'API uniquement si un token personnalisé x-userid est présent
+app.use(extractUserId);
 // SECURITE : Permet l'accès à l'API uniquement si un token d'authentification est présent
-app.use('/api', AUTH_TOKEN_CHECK);
+app.use(AUTH_TOKEN_CHECK);
 // Ajoute les différentes routes de l'api
 app.use('/api', routes);
 

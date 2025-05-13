@@ -3,7 +3,7 @@ import User from '../models/User';
 import Patient from '../models/Patient';
 import { RoleEnum } from '../resources/emuns/RolesEnum';
 import { SpecialityEnum } from '../resources/emuns/speciality';
-import { HealthcareProfessional } from '../models';
+import { HealthcareProfessional } from '../models/base';
 
 const router = express.Router();
 
@@ -47,10 +47,8 @@ router.post('/register/user', async (req: any, res: any) => {
 
 router.post('/register/patient', async (req: any, res: any) => {
   try {
-    // Récupération des informations nécessaires dans la requête
     const { userId, birthday, gender, address, socialSecurityNumber } = req.body;
 
-    // Vérification des champs requis
     if (!userId || !birthday || !gender || !address || !socialSecurityNumber) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
@@ -67,12 +65,11 @@ router.post('/register/patient', async (req: any, res: any) => {
       return res.status(409).json({ message: 'Un patient avec ce numéro de sécurité sociale existe déjà.' });
     }
 
-    // Création du patient associé à l'utilisateur existant
     const newPatient = await Patient.create({
-      UserId:userId,  // On associe l'userId déjà existant
+      UserId:userId,
       Birthday:birthday,
       Gender:gender,
-      Address: address || '',  // Champ address est optionnel
+      Address: address || '', 
       SocialSecurityNumber:socialSecurityNumber,
       CreatedAt: new Date(),
       UpdatedAt: new Date(),
@@ -90,13 +87,10 @@ router.post('/register/patient', async (req: any, res: any) => {
   }
 });
 
-// Route pour afficher tous les utilisateurs
 router.post('/register/caregiver', async (req: any, res: any ) => {
   try {
-    // Récupération des informations nécessaires dans la requête
     const { userId, speciality } = req.body;
-console.log(speciality)
-    // Vérification des champs requis
+
     if (!userId || !speciality) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
@@ -117,7 +111,7 @@ console.log(speciality)
     }
 
     const newCaregiver = await HealthcareProfessional.create({
-      UserId:userId,  // On associe l'userId déjà existant
+      UserId:userId,
       Speciality:speciality,
       CreatedAt: new Date(),
       UpdatedAt: new Date(),
