@@ -7,3 +7,4 @@
 /nodejs-api/node_modules/
 /nodejs-api/.env
 /nodejs-api/dist/
+/nodejs-api/coverage/

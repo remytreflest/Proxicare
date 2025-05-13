@@ -1,34 +1,14 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import routes from './routes/base/routes';
-import checkJwt from './middlewares/expressjwt.config';
-import { extractUserId } from './middlewares/extractUserId';
-
-// Load environment variables
-dotenv.config();
+import app from './app';
+import sequelize from './config/database';
+import { initModels } from './models/base';
 
 const PORT = process.env.PORT || 5000;
-const app = express();
-const AUTH_TOKEN_CHECK = checkJwt;
-  
-// Middleware
-app.use(express.json());
 
-app.use(cors({
-  origin: process.env.API_CORS || 'http://localhost:4200',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-UserId'],
-}));
-  
-// SECURITE : Permet l'accès à l'API uniquement si un token personnalisé x-userid est présent
-app.use(extractUserId);
-// SECURITE : Permet l'accès à l'API uniquement si un token d'authentification est présent
-app.use(AUTH_TOKEN_CHECK);
-// Ajoute les différentes routes de l'api
-app.use('/api', routes);
+initModels();
+sequelize.sync()
+  .then(() => console.log('Database synced with models'))
+  .catch((err) => console.error('Error syncing database:', err));
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });

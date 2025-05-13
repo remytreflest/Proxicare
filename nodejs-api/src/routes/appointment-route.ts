@@ -4,7 +4,7 @@ import HealthcareProfessional from '../models/HealthcareProfessional';
 import HealthcareAct from '../models/HealthcareAct';
 import { AppointmentsStatusEnum } from '../resources/emuns/appointmentsStatus';
 import Patient from '../models/Patient';
-import User from '../models/User';
+import { User } from '../models/User';
 
 const router = express.Router();
 

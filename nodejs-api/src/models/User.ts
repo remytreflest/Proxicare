@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
-import { RoleEnum } from '../resources/emuns/RolesEnum';
+import { RoleEnum } from '../resources/emuns/rolesEnum';
 
-class User extends Model {
+export class User extends Model {
   public Id!: number;
   public FirstName!: string;
   public LastName!: string;
@@ -50,5 +50,3 @@ User.init({
   tableName: 'Users',
   timestamps: false,
 });
-
-export default User;

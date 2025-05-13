@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import qrcodeRoutes from '../qrcode-route';
-import registerRoutes from '../registration-route';
+import registerRoutes from '../registerController';
 import healthcareRoutes from '../healthcare-route';
 import appointmentRoutes from '../appointment-route';
 
