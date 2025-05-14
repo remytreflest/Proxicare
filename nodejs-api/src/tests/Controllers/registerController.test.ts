@@ -1,8 +1,13 @@
 import request from 'supertest';
 import app from '../../app';
 import { User } from '@/models/User';
+import Patient from '@/models/Patient';
+import { SpecialityEnum } from '@/resources/emuns/speciality';
+import HealthcareProfessional from '@/models/HealthcareProfessional';
 
 jest.mock('@/models/User');
+jest.mock('@/models/Patient');
+jest.mock('@/models/HealthcareProfessional');
 
 describe('Register Controller', () => {
   
@@ -80,6 +85,181 @@ describe('Register Controller', () => {
         .post('/api/register/user')
         .set('x-userId', '123')
         .send(mockUser);
+  
+      expect(res.statusCode).toBe(500);
+    });
+
+  });
+
+  describe('POST /register/patient', () => {
+
+    const mockPatient = {
+        userId: '123',
+        birthday: '1991/06/18',
+        gender: 'M',
+        address: '100 avenue de château',
+        socialSecurityNumber: '12345678912345',
+    }
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+  
+    it('should return 201 if patient is created', async () => {
+  
+      (User.findByPk as jest.Mock).mockResolvedValue({ id: '123'});
+      (Patient.create as jest.Mock).mockResolvedValue(mockPatient);
+      (Patient.findOne as jest.Mock).mockResolvedValue(null);
+  
+      const res = await request(app)
+        .post('/api/register/patient')
+        .set('x-userId', '123')
+        .send(mockPatient);
+  
+      expect(res.statusCode).toBe(201);
+    });
+  
+    it('should return 400 if params left', async () => {
+      let mockPatient = {
+        userId: '123',
+        birthday: '1991/06/18',
+        gender: 'M',
+        address: '100 avenue de château',
+      }
+
+      const res = await request(app)
+        .post('/api/register/patient')
+        .set('x-userId', '123')
+        .send(mockPatient);
+  
+      expect(res.statusCode).toBe(400);
+    });
+  
+    it('should return 404 if user doesn\'t exist', async () => {
+  
+      (User.findByPk as jest.Mock).mockResolvedValue(null);
+  
+      const res = await request(app)
+        .post('/api/register/patient')
+        .set('x-userId', '123')
+        .send(mockPatient);
+  
+      expect(res.statusCode).toBe(404);
+    });
+  
+    it('should return 409 if patient with social security number already exist', async () => {
+  
+      (User.findByPk as jest.Mock).mockResolvedValue({ id: "123" });
+      (Patient.findOne as jest.Mock).mockResolvedValue({ id: '456' });  
+  
+      const res = await request(app)
+        .post('/api/register/patient')
+        .set('x-userId', '123')
+        .send(mockPatient);
+  
+      expect(res.statusCode).toBe(409);
+    });
+  
+    it('should return 500', async () => {
+  
+      (User.findByPk as jest.Mock).mockRejectedValue(new Error('DB uncatchable'));  
+  
+      const res = await request(app)
+        .post('/api/register/patient')
+        .set('x-userId', '123')
+        .send(mockPatient);
+  
+      expect(res.statusCode).toBe(500);
+    });
+
+  });
+
+
+  describe('POST /register/caregiver', () => {
+
+    const mockCaregiver = {
+        userId: '123',
+        speciality: SpecialityEnum.NURSE
+    }
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+  
+    it('should return 201 if caregiver is created', async () => {
+  
+      (User.findByPk as jest.Mock).mockResolvedValue({ id: '123'});
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
+      (HealthcareProfessional.create as jest.Mock).mockResolvedValue(mockCaregiver);
+  
+      const res = await request(app)
+        .post('/api/register/caregiver')
+        .set('x-userId', '123')
+        .send(mockCaregiver);
+  
+      expect(res.statusCode).toBe(201);
+    });
+  
+    it('should return 400 if params left', async () => {
+      let mockCaregiver = {
+        userId: '123',
+      }
+
+      const res = await request(app)
+        .post('/api/register/caregiver')
+        .set('x-userId', '123')
+        .send(mockCaregiver);
+  
+      expect(res.statusCode).toBe(400);
+    });
+
+    it('should return 400 if enum isn\'t valid', async () => {
+      let mockCaregiver = {
+        userId: '123',
+        speciality: 'untrucfaux'
+      }
+
+      const res = await request(app)
+        .post('/api/register/caregiver')
+        .set('x-userId', '123')
+        .send(mockCaregiver);
+  
+      expect(res.statusCode).toBe(400);
+    });
+  
+    it('should return 404 if user doesn\'t exist', async () => {
+  
+      (User.findByPk as jest.Mock).mockResolvedValue(null);
+  
+      const res = await request(app)
+        .post('/api/register/caregiver')
+        .set('x-userId', '123')
+        .send(mockCaregiver);
+  
+      expect(res.statusCode).toBe(404);
+    });
+  
+    it('should return 409 if caregiver with userId already exist', async () => {
+  
+      (User.findByPk as jest.Mock).mockResolvedValue({ id: "123" });
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({ id: '456' });  
+  
+      const res = await request(app)
+        .post('/api/register/caregiver')
+        .set('x-userId', '123')
+        .send(mockCaregiver);
+  
+      expect(res.statusCode).toBe(409);
+    });
+  
+    it('should return 500', async () => {
+  
+      (User.findByPk as jest.Mock).mockRejectedValue(new Error('DB uncatchable'));  
+  
+      const res = await request(app)
+        .post('/api/register/caregiver')
+        .set('x-userId', '123')
+        .send(mockCaregiver);
   
       expect(res.statusCode).toBe(500);
     });

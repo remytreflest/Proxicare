@@ -58,7 +58,6 @@ router.post('/register/user', async (req: any, res: any) => {
   } 
   catch (error) 
   {
-    console.error('Erreur lors de la création de l\'utilisateur:', error);
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });
@@ -121,7 +120,6 @@ router.post('/register/patient', async (req: any, res: any) => {
   } 
   catch (error) 
   {
-    console.error('Erreur lors de la création du patient:', error);
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });
@@ -180,7 +178,6 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
   } 
   catch (error) 
   {
-    console.error('Erreur lors de la création du professionnel de soins:', error);
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });
