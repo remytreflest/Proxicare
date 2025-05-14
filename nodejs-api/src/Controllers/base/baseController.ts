@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import qrcodeRoutes from '../qrcode-route';
+import qrcodeRoutes from '../qrcodeController';
 import registerRoutes from '../registerController';
-import healthcareRoutes from '../healthcare-route';
-import appointmentRoutes from '../appointment-route';
+import healthcareRoutes from '../healthcareController';
+import appointmentRoutes from '../appointmentController';
 
 const router = Router();
 

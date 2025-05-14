@@ -8,7 +8,10 @@ const router = express.Router();
 /**
  * Associe un professionnel de santé à un acte de soin
  * @route POST /healthcare/act
- * @body { HealthcareProfessionalId, HealthcareActId }
+ * @body { 
+ *  HealthcareProfessionalId, 
+ *  HealthcareActId 
+ * }
  */
 router.post('/healthcare/act', async (req: any, res: any) => {
     const { healthcareProfessionalId, healthcareActId } = req.body;

@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import routes from './routes/base/routes';
+import routes from './Controllers/base/baseController';
 import checkJwt from './middlewares/expressjwt.config';
 import { extractUserId } from './middlewares/extractUserId';
 

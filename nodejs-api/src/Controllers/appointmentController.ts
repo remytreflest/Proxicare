@@ -91,6 +91,21 @@ router.post('/appointment', async (req: any, res: any) => {
   }
 });
 
+/**
+ * @route DELETE /appointment/:id
+ * @description Supprime un rendez-vous à partir de son ID, si l'utilisateur est autorisé (soit le patient, soit le professionnel de santé concerné).
+ * 
+ * @access Authentifié (l'utilisateur doit être identifié via le middleware qui renseigne req.userId)
+ * 
+ * @param {number} id - L'identifiant du rendez-vous à supprimer (passé en paramètre d'URL)
+ * 
+ * @returns
+ * - 200 : Rendez-vous supprimé avec succès
+ * - 400 : ID de rendez-vous invalide
+ * - 403 : L'utilisateur n'est pas enregistré ou n'est pas lié au rendez-vous
+ * - 404 : Rendez-vous non trouvé
+ * - 500 : Erreur serveur
+ */
 router.delete('/appointment/:id', async (req: any, res: any) => {
 
   const appointmentId = parseInt(req.params.id);

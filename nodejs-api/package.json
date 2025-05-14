@@ -6,7 +6,9 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "nodemon --ext ts --exec ts-node src/index.ts",
-    "migrate": "node src/migrations/scripts/create-db.js && npx sequelize-cli db:migrate"
+    "migrate": "node src/migrations/scripts/create-db.js && npx sequelize-cli db:migrate",
+    "test": "npx jest",
+    "coverage": "npx jest --coverage"
   },
   "keywords": [],
   "author": "",

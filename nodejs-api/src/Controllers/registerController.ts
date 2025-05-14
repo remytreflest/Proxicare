@@ -7,6 +7,24 @@ import HealthcareProfessional from '../models/HealthcareProfessional';
 
 const router = express.Router();
 
+/**
+ * @route POST /register/user
+ * @description Crée un nouvel utilisateur dans la base de données avec un rôle générique `USER`.
+ * 
+ * @access Public
+ * 
+ * @body
+ * - id: string (requis) — Identifiant unique fourni par une tierce partie
+ * - firstName: string (requis) — Prénom de l'utilisateur
+ * - lastName: string (requis) — Nom de l'utilisateur
+ * - email: string (requis) — Adresse email de l'utilisateur
+ * 
+ * @returns
+ * - 201 : Utilisateur créé avec succès
+ * - 400 : Champs requis manquants
+ * - 409 : Conflit — ID ou email déjà utilisé
+ * - 500 : Erreur interne du serveur
+ */
 router.post('/register/user', async (req: any, res: any) => {
   try {
     const { id, firstName, lastName, email } = req.body;
@@ -45,6 +63,26 @@ router.post('/register/user', async (req: any, res: any) => {
   }
 });
 
+/**
+ * @route POST /register/patient
+ * @description Enregistre un nouveau patient dans la base de données à partir d’un utilisateur existant.
+ * 
+ * @access Public
+ * 
+ * @body
+ * - userId: string (requis) — Identifiant de l'utilisateur existant
+ * - birthday: string (requis) — Date de naissance du patient (au format ISO)
+ * - gender: string (requis) — Sexe du patient (par ex. : "M", "F", etc.)
+ * - address: string (requis) — Adresse du patient
+ * - socialSecurityNumber: string (requis) — Numéro de sécurité sociale unique
+ * 
+ * @returns
+ * - 201 : Patient enregistré avec succès
+ * - 400 : Champs requis manquants
+ * - 404 : Utilisateur non trouvé
+ * - 409 : Numéro de sécurité sociale déjà enregistré
+ * - 500 : Erreur interne du serveur
+ */
 router.post('/register/patient', async (req: any, res: any) => {
   try {
     const { userId, birthday, gender, address, socialSecurityNumber } = req.body;
@@ -55,6 +93,7 @@ router.post('/register/patient', async (req: any, res: any) => {
 
     // Vérification que l'utilisateur existe avant de l'associer au patient
     const existingUser = await User.findByPk(userId);
+    console.log("test" + existingUser)
     if (!existingUser) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
@@ -87,6 +126,23 @@ router.post('/register/patient', async (req: any, res: any) => {
   }
 });
 
+/**
+ * @route POST /register/caregiver
+ * @description Enregistre un professionnel de santé (HealthcareProfessional) à partir d’un utilisateur existant.
+ * 
+ * @access Public
+ * 
+ * @body
+ * - userId: string (requis) — Identifiant de l'utilisateur existant
+ * - speciality: string (requis) — Spécialité médicale (doit correspondre à une valeur de l'enum SpecialityEnum)
+ * 
+ * @returns
+ * - 201 : Professionnel de soins enregistré avec succès
+ * - 400 : Champs requis manquants ou spécialité invalide
+ * - 404 : Utilisateur non trouvé
+ * - 409 : Un professionnel de santé avec ce UserId existe déjà
+ * - 500 : Erreur interne du serveur
+ */
 router.post('/register/caregiver', async (req: any, res: any ) => {
   try {
     const { userId, speciality } = req.body;
