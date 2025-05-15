@@ -53,4 +53,16 @@ router.get('/qrcode', async (req, res) => {
     }
 });
 
+/**
+ * @route GET /qrcode/caregiver
+ * @description Endpoint temporaire qui retourne simplement "ok"
+ * @access Public ou protégé selon ton choix
+ * 
+ * @returns
+ * - 200 : { message: "ok" }
+ */
+router.get('/qrcode/caregiver', (req: any, res: any) => {
+  return res.status(200).json({ message: 'ok' });
+});
+
 export default router;

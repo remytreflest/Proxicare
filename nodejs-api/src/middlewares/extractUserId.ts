@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { unless } from 'express-unless';
 
 export function extractUserId(req: any, res: any, next: NextFunction) {
   const userIdHeader = req.header('X-Userid');
@@ -10,3 +11,5 @@ export function extractUserId(req: any, res: any, next: NextFunction) {
   req.userId = userIdHeader;
   next();
 }
+
+extractUserId.unless = unless;

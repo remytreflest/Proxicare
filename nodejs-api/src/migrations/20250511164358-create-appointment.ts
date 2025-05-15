@@ -46,6 +46,14 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    ValidateToken: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    },
+    ValidateTokenExpiration: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     CreatedAt: {
       type: DataTypes.DATE,
       allowNull: false,

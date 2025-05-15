@@ -10,6 +10,8 @@ class Appointment extends Model {
   public Status!: AppointmentsStatusEnum;
   public AppointmentStartDate!: Date;
   public AppointmentEndDate!: Date;
+  public ValidateToken?: string;
+  public ValidateTokenExpiration?: Date;
   public CreatedAt!: Date;
   public UpdatedAt!: Date;
 }
@@ -43,6 +45,14 @@ Appointment.init({
   AppointmentEndDate: {
     type: DataTypes.DATE,
     allowNull: false,
+  },
+  ValidateToken: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+  },
+  ValidateTokenExpiration: {
+    type: DataTypes.DATE,
+    allowNull: true,
   },
   CreatedAt: {
     type: DataTypes.DATE,
