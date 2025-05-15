@@ -174,7 +174,6 @@ describe('Register Controller', () => {
 
   });
 
-
   describe('POST /register/caregiver', () => {
 
     const mockCaregiver = {

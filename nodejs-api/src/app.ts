@@ -5,17 +5,15 @@ import routes from './Controllers/base/baseController';
 import checkJwt from './middlewares/expressjwt.config';
 import { extractUserId } from './middlewares/extractUserId';
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
 const AUTH_TOKEN_CHECK = checkJwt;
   
-// Middleware
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.API_CORS || 'http://localhost:4200',
+  origin: process.env.API_CORS || '',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-UserId'],

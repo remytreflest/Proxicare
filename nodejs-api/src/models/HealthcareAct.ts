@@ -1,11 +1,10 @@
 import { Model, DataTypes, Association } from 'sequelize';
 import sequelize from '../config/database';
 import HealthcareProfessional from './HealthcareProfessional';
-import { ActsEnum } from '../resources/emuns/acts';
 
 class HealthcareAct extends Model {
   public Id!: number;
-  public Name!: ActsEnum;
+  public Name!: string;
   public Description?: string;
   public Price!: number;
   public CreatedAt!: Date;
@@ -24,12 +23,13 @@ HealthcareAct.init({
     primaryKey: true,
   },
   Name: {
-    type: DataTypes.ENUM(...Object.values(ActsEnum)),
+    type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   Description: {
     type: DataTypes.TEXT,
-    allowNull: true,
+    allowNull: false,
   },
   Price: {
     type: DataTypes.FLOAT,

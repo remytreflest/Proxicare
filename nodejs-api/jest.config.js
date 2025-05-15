@@ -10,7 +10,6 @@ module.exports = {
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^@/models/User$': '<rootDir>/__mocks__/models/User.ts',
     '^./middlewares/expressjwt.config$': '<rootDir>/__mocks__/expressjwt.config.ts'
   },
   testPathIgnorePatterns: [

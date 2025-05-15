@@ -5,8 +5,61 @@ import HealthcareAct from '../models/HealthcareAct';
 import { AppointmentsStatusEnum } from '../resources/emuns/appointmentsStatus';
 import Patient from '../models/Patient';
 import { User } from '../models/User';
+import { Op } from 'sequelize';
 
 const router = express.Router();
+
+/**
+ * @route GET /appointments
+ * @description Récupère tous les rendez-vous liés à l'utilisateur (en tant que patient et/ou professionnel)
+ * @access Authentifié (header x-userId requis)
+ * 
+ * @returns
+ * - 200 : Liste des rendez-vous
+ * - 403 : Utilisateur inconnu
+ * - 500 : Erreur interne
+ */
+router.get('/appointments', async (req: any, res: any) => {
+  
+  const userId = req.userId;
+
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(403).json({ message: "Utilisateur inconnu." });
+    }
+
+    const [patient, caregiver] = await Promise.all([
+      Patient.findOne({ where: { UserId: user.Id } }),
+      HealthcareProfessional.findOne({ where: { UserId: user.Id } }),
+    ]);
+
+    if (!patient && !caregiver) {
+      return res.status(403).json({ message: "Aucun rendez-vous disponible pour cet utilisateur." });
+    }
+
+    const conditions: any[] = [];
+
+    if (patient) {
+      conditions.push({ PatientId: patient.Id });
+    }
+
+    if (caregiver) {
+      conditions.push({ HealthcareProfessionalId: caregiver.Id });
+    }
+
+    const appointments = await Appointment.findAll({
+      where: { [Op.or]: conditions },
+      order: [['AppointmentStartDate', 'ASC']],
+    });
+
+    return res.status(200).json(appointments);
+
+  } catch (error) {
+    console.error('Erreur récupération des rendez-vous :', error);
+    return res.status(500).json({ message: 'Erreur interne lors de la récupération des rendez-vous.' });
+  }
+});
 
 /**
  * Crée un rendez-vous médical (Appointment)

@@ -9,6 +9,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
     },
     Name: {
       type: DataTypes.STRING(100),
+      unique: true,
       allowNull: false,
     },
     Description: {
