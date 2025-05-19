@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "nodemon --ext ts --exec ts-node src/index.ts",
     "migrate": "node src/migrations/scripts/create-db.js && npx sequelize-cli db:migrate",
-    "test": "npx jest",
+    "test": "npx jest --verbose",
     "coverage": "npx jest --coverage"
   },
   "keywords": [],

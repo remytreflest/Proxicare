@@ -6,7 +6,7 @@ import { SpecialityEnum } from '../resources/emuns/speciality';
 class HealthcareProfessional extends Model {
   public Id!: number;
   public UserId!: number;
-  public Specialty?: SpecialityEnum;
+  public Speciality?: SpecialityEnum;
 
   public readonly HealthcareActs?: HealthcareAct[];
 

@@ -1,7 +1,7 @@
 import express from 'express';
-import { HealthcareProfessionalHealthcareAct } from '../models/HealthcareProfessionalHealthcareAct';
-import HealthcareProfessional from '../models/HealthcareProfessional';
-import HealthcareAct from '../models/HealthcareAct';
+import { HealthcareProfessionalHealthcareAct } from '@/models/HealthcareProfessionalHealthcareAct';
+import HealthcareProfessional from '@/models/HealthcareProfessional';
+import HealthcareAct from '@/models/HealthcareAct';
 
 const router = express.Router();
 
@@ -14,33 +14,34 @@ const router = express.Router();
  * }
  */
 router.post('/healthcare/act/caregiver', async (req: any, res: any) => {
-    const { healthcareProfessionalId, healthcareActId } = req.body;
+  try {
 
-    if (!healthcareProfessionalId || !healthcareActId) {
-        return res.status(400).json({ message: 'HealthcareProfessionalId et HealthcareActId sont requis.' });
-    }
+      const { healthcareProfessionalId, healthcareActId } = req.body;
 
-    const existinghealthcareProfessionalId = await HealthcareProfessional.findOne({ where: { Id: healthcareProfessionalId } });
-    if (!existinghealthcareProfessionalId) {
-        return res.status(404).json({ error: 'Le professionnel de soins n\'a pas été trouvé' });
-    }
+      if (!healthcareProfessionalId || !healthcareActId) {
+          return res.status(400).json({ message: 'HealthcareProfessionalId et HealthcareActId sont requis.' });
+      }
 
-    const existinghealthcareActId = await HealthcareAct.findOne({ where: { Id: healthcareProfessionalId } });
-    if (!existinghealthcareActId) {
-        return res.status(404).json({ error: 'L\'acte n\'a pas été trouvé' });
-    }
+      const existinghealthcareProfessionalId = await HealthcareProfessional.findOne({ where: { Id: healthcareProfessionalId } });
+      if (!existinghealthcareProfessionalId) {
+          return res.status(404).json({ error: 'Le professionnel de soins n\'a pas été trouvé' });
+      }
 
-    try {
-        await HealthcareProfessionalHealthcareAct.create({
-            HealthcareProfessionalId: healthcareProfessionalId,
-            HealthcareActId: healthcareActId,
-        });
+      const existinghealthcareActId = await HealthcareAct.findOne({ where: { Id: healthcareProfessionalId } });
+      if (!existinghealthcareActId) {
+          return res.status(404).json({ error: 'L\'acte n\'a pas été trouvé' });
+      }
 
-        res.status(201).json({ message: 'Association créée avec succès.' });
+      
+      await HealthcareProfessionalHealthcareAct.create({
+          HealthcareProfessionalId: healthcareProfessionalId,
+          HealthcareActId: healthcareActId,
+      });
+
+      res.status(201).json({ message: 'Association créée avec succès.' });
     } 
     catch (error) 
     {
-        console.error('Erreur lors de la création de l\'association :', error);
         res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
@@ -68,7 +69,7 @@ router.post('/healthcare/act', async (req: any, res: any) => {
     return res.status(400).json({ message: 'Le champ "Name" est requis et doit être une chaîne non vide.' });
   }
 
-  if (isNaN(price) || price < 0) {
+  if (isNaN(price) || price <= 0) {
     return res.status(400).json({ message: 'Le champ "Price" est requis et doit être un nombre positif.' });
   }
 

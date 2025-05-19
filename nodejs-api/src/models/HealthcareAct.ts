@@ -8,6 +8,7 @@ class HealthcareAct extends Model {
   public Description?: string;
   public Price!: number;
   public CreatedAt!: Date;
+  public UpdatedAt!: Date;
 
   public readonly HealthcareProfessionals?: HealthcareProfessional[];
 
