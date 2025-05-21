@@ -1,7 +1,7 @@
-import app from '../../app';
+import app from '@/app';
 import request from 'supertest';
 import HealthcareAct from "@/models/HealthcareAct";
-import { HealthcareProfessionalHealthcareAct } from '@/models/HealthcareProfessionalHealthcareAct';
+import HealthcareProfessionalHealthcareAct from '@/models/HealthcareProfessionalHealthcareAct';
 import HealthcareProfessional from '@/models/HealthcareProfessional';
 
 

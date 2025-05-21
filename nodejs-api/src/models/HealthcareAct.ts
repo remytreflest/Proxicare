@@ -1,6 +1,6 @@
 import { Model, DataTypes, Association } from 'sequelize';
-import sequelize from '../config/database';
-import HealthcareProfessional from './HealthcareProfessional';
+import sequelize from '@/config/database';
+import HealthcareProfessional from '@/models/HealthcareProfessional';
 
 class HealthcareAct extends Model {
   public Id!: number;

@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../../app';
+import app from '@/app';
 import { User } from '@/models/User';
 import Patient from '@/models/Patient';
 import { SpecialityEnum } from '@/resources/emuns/speciality';

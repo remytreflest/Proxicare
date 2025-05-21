@@ -1,5 +1,5 @@
 import express from 'express';
-import { HealthcareProfessionalHealthcareAct } from '@/models/HealthcareProfessionalHealthcareAct';
+import HealthcareProfessionalHealthcareAct from '@/models/HealthcareProfessionalHealthcareAct';
 import HealthcareProfessional from '@/models/HealthcareProfessional';
 import HealthcareAct from '@/models/HealthcareAct';
 

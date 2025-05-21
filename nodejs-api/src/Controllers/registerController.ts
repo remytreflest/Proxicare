@@ -1,9 +1,9 @@
 import express from 'express';
-import { User } from '../models/User';
-import Patient from '../models/Patient';
-import { RoleEnum } from '../resources/emuns/rolesEnum';
-import { SpecialityEnum } from '../resources/emuns/speciality';
-import HealthcareProfessional from '../models/HealthcareProfessional';
+import { User } from '@/models/User';
+import Patient from '@/models/Patient';
+import { RoleEnum } from '@/resources/emuns/rolesEnum';
+import { SpecialityEnum } from '@/resources/emuns/speciality';
+import HealthcareProfessional from '@/models/HealthcareProfessional';
 
 const router = express.Router();
 

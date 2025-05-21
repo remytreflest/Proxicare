@@ -1,9 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import routes from './Controllers/base/baseController';
-import checkJwt from './middlewares/expressjwt.config';
-import { extractUserId } from './middlewares/extractUserId';
+import routes from '@/Controllers/base/baseController';
+import checkJwt from '@/middlewares/expressjwt.config';
+import { extractUserId } from '@/middlewares/extractUserId';
 
 dotenv.config();
 

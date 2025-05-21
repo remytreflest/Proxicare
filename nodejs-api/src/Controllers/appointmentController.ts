@@ -1,10 +1,10 @@
 import express from 'express';
-import Appointment from '../models/Appointment';
-import HealthcareProfessional from '../models/HealthcareProfessional';
-import HealthcareAct from '../models/HealthcareAct';
-import { AppointmentsStatusEnum } from '../resources/emuns/appointmentsStatus';
-import Patient from '../models/Patient';
-import { User } from '../models/User';
+import Appointment from '@/models/Appointment';
+import HealthcareProfessional from '@/models/HealthcareProfessional';
+import HealthcareAct from '@/models/HealthcareAct';
+import { AppointmentsStatusEnum } from '@/resources/emuns/appointmentsStatus';
+import Patient from '@/models/Patient';
+import { User } from '@/models/User';
 import { Op } from 'sequelize';
 
 const router = express.Router();

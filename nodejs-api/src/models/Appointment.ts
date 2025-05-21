@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
-import { AppointmentsStatusEnum } from '../resources/emuns/appointmentsStatus';
+import sequelize from '@/config/database';
+import { AppointmentsStatusEnum } from '@/resources/emuns/appointmentsStatus';
 
 class Appointment extends Model {
   public Id!: number;

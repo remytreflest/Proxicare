@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
-import { RoleEnum } from '../resources/emuns/rolesEnum';
+import sequelize from '@/config/database';
+import { RoleEnum } from '@/resources/emuns/rolesEnum';
 
 export class User extends Model {
   public Id!: number;

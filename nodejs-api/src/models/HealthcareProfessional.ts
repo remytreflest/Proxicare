@@ -1,7 +1,7 @@
 import { Model, DataTypes, Association } from 'sequelize';
-import sequelize from '../config/database';
-import HealthcareAct from './HealthcareAct';
-import { SpecialityEnum } from '../resources/emuns/speciality';
+import sequelize from '@/config/database';
+import HealthcareAct from '@/models/HealthcareAct';
+import { SpecialityEnum } from '@/resources/emuns/speciality';
 
 class HealthcareProfessional extends Model {
   public Id!: number;
