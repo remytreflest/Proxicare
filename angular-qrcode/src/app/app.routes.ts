@@ -1,10 +1,19 @@
 import { Routes } from '@angular/router';
-import { LogoutButtonComponent } from '../components/Auth0/logout-button/logout-button.component';
-import { AppComponent } from './app.component';
+import { AppComponent } from '../components/base/app.component';
+import { DashboardComponent } from '../pages/dashboard/dashboard.component';
+import { PlanningComponent } from '../pages/planning/planning.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: AppComponent
-  }
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent
+  },
+  {
+    path: 'planning',
+    component: PlanningComponent
+  },
 ];

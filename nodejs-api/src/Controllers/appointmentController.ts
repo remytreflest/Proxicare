@@ -56,7 +56,6 @@ router.get('/appointments', async (req: any, res: any) => {
     return res.status(200).json(appointments);
 
   } catch (error) {
-    console.error('Erreur récupération des rendez-vous :', error);
     return res.status(500).json({ message: 'Erreur interne lors de la récupération des rendez-vous.' });
   }
 });
@@ -139,7 +138,6 @@ router.post('/appointment', async (req: any, res: any) => {
   } 
   catch (error) 
   {
-    console.error('Erreur lors de la création du rendez-vous :', error);
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
@@ -195,7 +193,6 @@ router.delete('/appointment/:id', async (req: any, res: any) => {
 
   } catch (error) 
   {
-    console.error('Erreur suppression rendez-vous:', error);
     res.status(500).json({ message: "Erreur serveur lors de la suppression du rendez-vous" });
   }
 });

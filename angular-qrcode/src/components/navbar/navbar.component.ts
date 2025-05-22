@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { LogoutButtonComponent } from '../Auth0/logout-button/logout-button.component';
 import { LoginButtonComponent } from '../Auth0/login-button/login-button.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, LoginButtonComponent, LogoutButtonComponent],
+  imports: [CommonModule, LoginButtonComponent, LogoutButtonComponent, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
