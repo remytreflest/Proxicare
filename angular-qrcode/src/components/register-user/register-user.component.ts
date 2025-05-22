@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/userService';
 import { AuthService } from '@auth0/auth0-angular';
+import { map, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-register-user',
@@ -14,17 +15,22 @@ export class RegisterUserComponent {
 
   userForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private userService: UserService)
+  constructor(private fb: FormBuilder, private userService: UserService, private auth: AuthService)
   {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]]
+      lastName: ['', Validators.required]
     });
   }
 
   onSubmit() {
     if (this.userForm.valid) {
+      let email = this.auth.user$.pipe(map(user => user?.name)).subscribe(email =>
+      {
+        console.log('Nom :', email);
+        return email;
+      });
+
       this.userService.registerUser(this.userForm.value).subscribe({
         next: (res) => console.log('Utilisateur créé :', res),
         error: (err) => console.error('Erreur création utilisateur :', err)

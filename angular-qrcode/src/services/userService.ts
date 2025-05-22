@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, firstValueFrom, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { environment } from '../environment';
+import { AuthService } from '@auth0/auth0-angular';
 
 export interface User {
-  Id: string;
-  FirstName: string;
-  LastName: string;
-  Email: string;
-  Role: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
   // autres champs si besoin
 }
 
@@ -20,7 +21,7 @@ export class UserService {
 
   private user: User | null = null;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private auth: AuthService) {}
 
   getUserById(userId: string): void {
     this.http.get<User>(`${environment.urls.back}/register/user/${userId}`).subscribe({
@@ -41,7 +42,15 @@ export class UserService {
   }
 
   registerUser(user: User): Observable<boolean> {
-    console.log(user);
+
+    this.auth.user$.pipe(map(user => user?.name)).subscribe(email =>
+    {
+      if (!email) {
+        throw new Error("Email requis pour initialiser l'utilisateur.");
+      }
+      user.email = email;
+    });
+
     return this.http.post<User>(`${environment.urls.back}/register/user`, user).pipe(
       map((res) => {
         this.user = res;
