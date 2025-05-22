@@ -1,0 +1,13 @@
+<h1>Enregistrer un utilisateur</h1>
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <label>Prénom:</label>
+  <input formControlName="firstName" /><br />
+
+  <label>Nom:</label>
+  <input formControlName="lastName" /><br />
+
+  <label>Email:</label>
+  <input formControlName="email" type="email" /><br />
+
+  <button type="submit" [disabled]="userForm.invalid">Créer</button>
+</form>

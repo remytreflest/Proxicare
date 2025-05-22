@@ -8,6 +8,32 @@ import HealthcareProfessional from '@/models/HealthcareProfessional';
 const router = express.Router();
 
 /**
+ * @route GET /register/user/:id
+ * @description Récupère un utilisateur par son GUID
+ * @access Authentifié (ou public si besoin)
+ */
+router.get('/register/user/:id', async (req: any, res: any) => {
+  const userId = req.params.id;
+
+  if (!userId) {
+    return res.status(400).json({ message: "ID utilisateur requis." });
+  }
+
+  try {
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur introuvable." });
+    }
+
+    return res.status(200).json(user);
+
+  } catch (error) {
+    return res.status(500).json({ message: "Erreur serveur." });
+  }
+});
+
+/**
  * @route POST /register/user
  * @description Crée un nouvel utilisateur dans la base de données avec un rôle générique `USER`.
  * 
@@ -27,14 +53,15 @@ const router = express.Router();
  */
 router.post('/register/user', async (req: any, res: any) => {
   try {
-    const { id, firstName, lastName, email } = req.body;
+    const auth0Id = req.userId;
+    const { firstName, lastName, email } = req.body;
     const role = RoleEnum.USER;
 
-    if (!id || !firstName || !lastName || !email ) {
+    if (!auth0Id || !firstName || !lastName || !email ) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
-    const existingUserId = await User.findOne({ where: { Id: id } });
+    const existingUserId = await User.findOne({ where: { Id: auth0Id } });
     if (existingUserId) {
       return res.status(409).json({ error: 'Un utilisateur avec cet ID existe déjà' });
     }
@@ -45,7 +72,7 @@ router.post('/register/user', async (req: any, res: any) => {
     }
 
     const newUser = await User.create({
-      Id: id,
+      Id: auth0Id,
       FirstName:firstName,
       LastName:lastName,
       Email: email,
