@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { environment } from '../environment';
 import { AuthService } from '@auth0/auth0-angular';
+import { RolesEnum } from '../resources/rolesEnum';
 
 export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  // autres champs si besoin
+  Id: string;
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  Role: string;
 }
 
 @Injectable({
@@ -20,6 +20,8 @@ export interface User {
 export class UserService {
 
   private user: User | null = null;
+  private rolesLoadedSubject = new BehaviorSubject<boolean>(false);
+  rolesLoaded$ = this.rolesLoadedSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router, private auth: AuthService) {}
 
@@ -29,6 +31,7 @@ export class UserService {
         console.log("Utilisateur connecté")
         console.log(this.user)
         this.user = user
+        this.rolesLoadedSubject.next(true);
       },
       error: (err) => {
         console.error('L\'utilisateur n\'existe pas et va être créé', err)
@@ -41,17 +44,42 @@ export class UserService {
     return this.user;
   }
 
+  getRoles(): RolesEnum[] | null {
+    if (this.user == null)
+      return null;
+
+    return this.user.Role.split(',')
+      .map(r => r.trim())
+      .filter(r => Object.values(RolesEnum).includes(r as RolesEnum))
+      .map(r => r as RolesEnum);
+  }
+
+  hasRole(required: RolesEnum): boolean {
+    let roles = this.getRoles();
+
+    if (roles == null)
+      return false;
+
+    return roles.includes(required);
+  }
+
   registerUser(user: User): Observable<boolean> {
+
+    let userDto = {
+      firstName: user.FirstName,
+      lastName: user.LastName,
+      email: ''
+    };
 
     this.auth.user$.pipe(map(user => user?.name)).subscribe(email =>
     {
       if (!email) {
         throw new Error("Email requis pour initialiser l'utilisateur.");
       }
-      user.email = email;
+      userDto.email = email;
     });
 
-    return this.http.post<User>(`${environment.urls.back}/register/user`, user).pipe(
+    return this.http.post<User>(`${environment.urls.back}/register/user`, userDto).pipe(
       map((res) => {
         this.user = res;
         console.log("Utilisateur connecté après inscription automatique")

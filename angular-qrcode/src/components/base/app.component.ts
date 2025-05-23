@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -13,17 +13,23 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  qrCodeUrl: string | null = null;
-  scannerEnabled = false;
+export class AppComponent implements OnInit {
 
-  constructor(private userService: UserService, private auth: AuthService)
-  {
-    auth.user$.subscribe({
+  constructor(
+    private auth: AuthService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
+    this.auth.user$.subscribe({
       next: (authUser) => {
-        userService.getUserById(authUser!.sub!.split('|')[1]);
+        const sub = authUser?.sub;
+        if (sub) {
+          const userId = sub.split('|')[1]; // Auth0 format: "auth0|123456"
+          this.userService.getUserById(userId);
+        }
       },
       error: (err) => console.error('Erreur chargement utilisateur Auth0', err)
-    })
+    });
   }
 }

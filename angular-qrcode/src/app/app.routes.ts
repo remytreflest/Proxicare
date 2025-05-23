@@ -3,6 +3,8 @@ import { AppComponent } from '../components/base/app.component';
 import { DashboardComponent } from '../pages/dashboard/dashboard.component';
 import { PlanningComponent } from '../pages/planning/planning.component';
 import { RegisterComponent } from '../pages/register/register.component';
+import { roleGuard } from '../guards/roleGuard';
+import { RolesEnum } from '../resources/rolesEnum';
 
 export const routes: Routes = [
   {
@@ -19,6 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'planning',
-    component: PlanningComponent
+    component: PlanningComponent,
+    canActivate: [roleGuard(RolesEnum.ADMIN)]
   },
 ];

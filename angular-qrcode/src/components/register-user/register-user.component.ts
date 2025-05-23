@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/userService';
 import { AuthService } from '@auth0/auth0-angular';
-import { map, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-register-user',
@@ -25,12 +24,6 @@ export class RegisterUserComponent {
 
   onSubmit() {
     if (this.userForm.valid) {
-      let email = this.auth.user$.pipe(map(user => user?.name)).subscribe(email =>
-      {
-        console.log('Nom :', email);
-        return email;
-      });
-
       this.userService.registerUser(this.userForm.value).subscribe({
         next: (res) => console.log('Utilisateur créé :', res),
         error: (err) => console.error('Erreur création utilisateur :', err)

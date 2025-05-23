@@ -119,7 +119,7 @@ router.post('/register/patient', async (req: any, res: any) => {
 
     // Vérification que l'utilisateur existe avant de l'associer au patient
     const existingUser = await User.findByPk(userId);
-    console.log("test" + existingUser)
+
     if (!existingUser) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
