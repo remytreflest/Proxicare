@@ -5,6 +5,7 @@ import { LogoutButtonComponent } from '../Auth0/logout-button/logout-button.comp
 import { LoginButtonComponent } from '../Auth0/login-button/login-button.component';
 import { RouterModule } from '@angular/router';
 import { HasRoleDirective } from '../../conditionalView/HasRoleDirective';
+import { RolesEnum } from '../../resources/rolesEnum';
 
 @Component({
   selector: 'app-navbar',
@@ -16,8 +17,7 @@ import { HasRoleDirective } from '../../conditionalView/HasRoleDirective';
 
 export class NavbarComponent {
 
-  /**
-   * Constructeur du composant NavBar
-   */
+  RolesEnum = RolesEnum;
+
   constructor(public auth: AuthService) {}
 }
