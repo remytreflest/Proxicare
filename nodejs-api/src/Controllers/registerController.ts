@@ -1,9 +1,10 @@
 import express from 'express';
 import { User } from '@/models/User';
 import Patient from '@/models/Patient';
-import { RoleEnum } from '@/resources/emuns/rolesEnum';
+import { RolesEnum } from '@/resources/emuns/rolesEnum';
 import { SpecialityEnum } from '@/resources/emuns/speciality';
 import HealthcareProfessional from '@/models/HealthcareProfessional';
+import { joinRoles } from '@/helpers/controllers/registerHelper';
 
 const router = express.Router();
 
@@ -54,8 +55,9 @@ router.get('/register/user/:id', async (req: any, res: any) => {
 router.post('/register/user', async (req: any, res: any) => {
   try {
     const auth0Id = req.userId;
+    console.log(req.body)
     const { firstName, lastName, email } = req.body;
-    const role = RoleEnum.USER;
+    const roles: RolesEnum[] = [RolesEnum.USER];
 
     if (!auth0Id || !firstName || !lastName || !email ) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
@@ -76,7 +78,7 @@ router.post('/register/user', async (req: any, res: any) => {
       FirstName:firstName,
       LastName:lastName,
       Email: email,
-      Role:role,
+      Roles: joinRoles(roles),
       CreatedAt: new Date(),
       UpdatedAt: new Date(),
     });
@@ -85,6 +87,7 @@ router.post('/register/user', async (req: any, res: any) => {
   } 
   catch (error) 
   {
+    console.log(error)
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });

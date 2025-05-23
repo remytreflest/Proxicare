@@ -1,10 +1,10 @@
 <h1>Enregistrer un utilisateur</h1>
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
   <label>Prénom:</label>
-  <input formControlName="firstName" /><br />
+  <input formControlName="FirstName" /><br />
 
   <label>Nom:</label>
-  <input formControlName="lastName" /><br />
+  <input formControlName="LastName" /><br />
 
   <button type="submit" [disabled]="userForm.invalid">Créer</button>
 </form>

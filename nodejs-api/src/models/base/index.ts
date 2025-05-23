@@ -3,6 +3,7 @@ import { User } from '../User';
 import Appointment from '../Appointment';
 import HealthcareProfessional from '../HealthcareProfessional';
 import HealthcareAct from '../HealthcareAct';
+import { Structure } from '../Structure';
 
 // Fonction pour initialiser les associations
 export const initModels = () => {
@@ -29,11 +30,21 @@ export const initModels = () => {
     foreignKey: 'HealthcareActId',
   });
 
+  HealthcareProfessional.belongsToMany(Structure, {
+    through: 'HealthcareProfessionalStructures',
+    foreignKey: 'HealthcareProfessionalId'
+  });
+  Structure.belongsToMany(HealthcareProfessional, {
+    through: 'HealthcareProfessionalStructures',
+    foreignKey: 'StructureId'
+  });
+
  return {
     User,
     Patient,
     HealthcareProfessional,
     HealthcareAct,
     Appointment,
+    Structure
   };
 };

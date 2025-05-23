@@ -79,6 +79,8 @@ export class UserService {
       userDto.email = email;
     });
 
+    console.log(userDto)
+
     return this.http.post<User>(`${environment.urls.back}/register/user`, userDto).pipe(
       map((res) => {
         this.user = res;

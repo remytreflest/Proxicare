@@ -22,7 +22,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       unique: true,  // Unique constraint sur le champ Email
     },
     Role: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     CreatedAt: {

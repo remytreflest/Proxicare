@@ -1,13 +1,13 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '@/config/database';
-import { RoleEnum } from '@/resources/emuns/rolesEnum';
+import { RolesEnum } from '@/resources/emuns/rolesEnum';
 
 export class User extends Model {
   public Id!: number;
   public FirstName!: string;
   public LastName!: string;
   public Email!: string;
-  public Role!: RoleEnum;
+  public Roles!: string;
   public CreatedAt!: Date;
 }
 
@@ -31,8 +31,8 @@ User.init({
     allowNull: false,
     unique: true,
   },
-  Role: {
-    type: DataTypes.ENUM(...Object.values(RoleEnum)),
+  Roles: {
+    type: DataTypes.STRING(255),
     allowNull: false,
   },
   CreatedAt: {
