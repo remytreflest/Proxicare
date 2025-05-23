@@ -1,1 +1,24 @@
-<p>register-caregiver works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="speciality">Spécialité</label>
+    <select id="speciality" formControlName="speciality">
+      <option *ngFor="let spec of specialities" [value]="spec">{{ spec }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="structureId">Structure</label>
+    <select id="structureId" formControlName="structureId">
+      <option *ngFor="let structure of structures" [value]="structure.Id">
+        {{ structure.Name }}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label for="idn">Numéro IDN</label>
+    <input id="idn" formControlName="idn" />
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Créer le soignant</button>
+</form>

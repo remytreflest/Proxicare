@@ -29,6 +29,14 @@ HealthcareProfessional.init({
     type: DataTypes.ENUM(...Object.values(SpecialityEnum)),
     allowNull: true,
   },
+  StructureId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  IDN: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+  },
   CreatedAt: {
     type: DataTypes.DATE,
     allowNull: false,

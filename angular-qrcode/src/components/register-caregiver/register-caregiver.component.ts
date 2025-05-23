@@ -1,12 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environment';
+import { enumToArray } from '../../herlpers/enumHelper';
+import { SpecialityEnum } from '../../resources/specialityEnum';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register-caregiver',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register-caregiver.component.html',
   styleUrl: './register-caregiver.component.scss'
 })
 export class RegisterCaregiverComponent {
+  form!: FormGroup;
+  specialities = enumToArray(SpecialityEnum); // adapte selon ton enum
+  structures: any[] = [];
 
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      speciality: ['', Validators.required],
+      structureId: [null, Validators.required],
+      idn: ['', Validators.required],
+    });
+
+    this.http.get<any[]>(`${environment.urls.back}/structures`).subscribe({
+      next: (data) => (this.structures = data),
+      error: (err) => console.error('Erreur chargement structures', err),
+    });
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) return;
+
+    const formValue = this.form.value;
+    const payload = {
+      userId: formValue.userId,
+      speciality: formValue.speciality,
+      structureId: formValue.structureId,
+      idn: formValue.idn,
+    };
+
+    this.http.post(`${environment.urls.back}/register/caregiver`, payload).subscribe({
+      next: (res) => console.log('Soignant créé avec succès :', res),
+      error: (err) => console.error('Erreur lors de la création du soignant', err),
+    });
+  }
 }

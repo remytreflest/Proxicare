@@ -55,7 +55,6 @@ router.get('/register/user/:id', async (req: any, res: any) => {
 router.post('/register/user', async (req: any, res: any) => {
   try {
     const auth0Id = req.userId;
-    console.log(req.body)
     const { firstName, lastName, email } = req.body;
     const roles: RolesEnum[] = [RolesEnum.USER];
 
@@ -87,7 +86,6 @@ router.post('/register/user', async (req: any, res: any) => {
   } 
   catch (error) 
   {
-    console.log(error)
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });
@@ -173,9 +171,10 @@ router.post('/register/patient', async (req: any, res: any) => {
  */
 router.post('/register/caregiver', async (req: any, res: any ) => {
   try {
-    const { userId, speciality } = req.body;
+    const userId = req.userId;
+    const { speciality, structureId, idn } = req.body;
 
-    if (!userId || !speciality) {
+    if (!speciality || structureId == 0 || !idn) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
@@ -197,6 +196,8 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
     const newCaregiver = await HealthcareProfessional.create({
       UserId:userId,
       Speciality:speciality,
+      StructureId:structureId,
+      IDN:idn,
       CreatedAt: new Date(),
       UpdatedAt: new Date(),
     });
@@ -208,6 +209,7 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
   } 
   catch (error) 
   {
+    console.log(error)
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });

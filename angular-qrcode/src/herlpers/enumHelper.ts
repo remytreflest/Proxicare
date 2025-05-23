@@ -6,3 +6,7 @@ export function toRoleEnum(value: string): RolesEnum | null {
   }
   return null;
 }
+
+export function enumToArray<T extends object>(enumObj: T): string[] {
+  return Object.values(enumObj) as string[];
+}
