@@ -6,6 +6,7 @@ import { AppointmentsStatusEnum } from '@/resources/emuns/appointmentsStatus';
 import Patient from '@/models/Patient';
 import { User } from '@/models/User';
 import { Op } from 'sequelize';
+import HealthcareProfessionalHealthcareAct from '@/models/HealthcareProfessionalHealthcareAct';
 
 const router = express.Router();
 
@@ -29,12 +30,12 @@ router.get('/appointments', async (req: any, res: any) => {
       return res.status(403).json({ message: "Utilisateur inconnu." });
     }
 
-    const [patient, caregiver] = await Promise.all([
+    const [patient, healthcareprofessional] = await Promise.all([
       Patient.findOne({ where: { UserId: user.Id } }),
       HealthcareProfessional.findOne({ where: { UserId: user.Id } }),
     ]);
 
-    if (!patient && !caregiver) {
+    if (!patient && !healthcareprofessional) {
       return res.status(403).json({ message: "Aucun rendez-vous disponible pour cet utilisateur." });
     }
 
@@ -44,8 +45,8 @@ router.get('/appointments', async (req: any, res: any) => {
       conditions.push({ PatientId: patient.Id });
     }
 
-    if (caregiver) {
-      conditions.push({ HealthcareProfessionalId: caregiver.Id });
+    if (healthcareprofessional) {
+      conditions.push({ HealthcareProfessionalId: healthcareprofessional.Id });
     }
 
     const appointments = await Appointment.findAll({
@@ -123,6 +124,19 @@ router.post('/appointment', async (req: any, res: any) => {
         return res.status(400).json({ message: 'Les dates doivent être dans le futur.' });
     }
 
+    const hasActLink = await HealthcareProfessionalHealthcareAct.findOne({
+      where: {
+        HealthcareProfessionalId: healthcareProfessionalId,
+        HealthcareActId: healthcareActId,
+      },
+    });
+
+    if (!hasActLink) {
+      return res.status(403).json({
+        message: 'Ce professionnel n\'est pas autorisé à réaliser cet acte.',
+      });
+    }
+
   try {
     const appointment = await Appointment.create({
       PatientId: patientId,
@@ -184,8 +198,8 @@ router.delete('/appointment/:id', async (req: any, res: any) => {
     }
 
     const patient = await Patient.findOne({ where: { UserId: user.Id } });
-    const caregiver = await HealthcareProfessional.findOne({ where: { UserId: user.Id } });
-    if (!patient && !caregiver) {
+    const healthcareprofessional = await HealthcareProfessional.findOne({ where: { UserId: user.Id } });
+    if (!patient && !healthcareprofessional) {
       return res.status(403).json({ message: "Vous n'êtes ni le patient ni le professionel de soins, il est impossible de supprimer ce rendez vous" });
     }
 

@@ -5,6 +5,7 @@ import { RolesEnum } from '@/resources/emuns/rolesEnum';
 import { SpecialityEnum } from '@/resources/emuns/speciality';
 import HealthcareProfessional from '@/models/HealthcareProfessional';
 import { joinRoles } from '@/helpers/controllers/registerHelper';
+import { addUserRole } from '@/resources/helpers/userHelper';
 
 const router = express.Router();
 
@@ -121,14 +122,12 @@ router.post('/register/patient', async (req: any, res: any) => {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
-    // Vérification que l'utilisateur existe avant de l'associer au patient
     const existingUser = await User.findByPk(userId);
 
     if (!existingUser) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
 
-    // Vérification que le numéro de sécurité sociale est unique
     const existingPatient = await Patient.findOne({ where: { SocialSecurityNumber:socialSecurityNumber } });
     if (existingPatient) {
       return res.status(409).json({ message: 'Un patient avec ce numéro de sécurité sociale existe déjà.' });
@@ -144,13 +143,7 @@ router.post('/register/patient', async (req: any, res: any) => {
       UpdatedAt: new Date(),
     });
 
-    // On ajoute le rôle HEALTHCAREPROFESSIONAL
-    const rolesArray = existingUser.Roles ? existingUser.Roles.split(',') : [];
-    if (!rolesArray.includes(RolesEnum.PATIENT)) {
-      rolesArray.push(RolesEnum.PATIENT);
-      existingUser.Roles = rolesArray.join(',');
-      await existingUser.save();
-    }
+    addUserRole(existingUser, RolesEnum.PATIENT);
 
     return res.status(201).json({
       message: 'Patient enregistré avec succès.',
@@ -164,7 +157,7 @@ router.post('/register/patient', async (req: any, res: any) => {
 });
 
 /**
- * @route POST /register/caregiver
+ * @route POST /register/healthcareprofessional
  * @description Enregistre un professionnel de santé (HealthcareProfessional) à partir d’un utilisateur existant.
  * 
  * @access Protégé
@@ -180,7 +173,7 @@ router.post('/register/patient', async (req: any, res: any) => {
  * - 409 : Un professionnel de santé avec ce UserId existe déjà
  * - 500 : Erreur interne du serveur
  */
-router.post('/register/caregiver', async (req: any, res: any ) => {
+router.post('/register/healthcareprofessional', async (req: any, res: any ) => {
   try {
     const userId = req.userId;
     const { speciality, structureId, idn } = req.body;
@@ -204,7 +197,7 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
       return res.status(409).json({ error: 'Un utilisateur avec cet ID existe déjà' });
     }
 
-    const newCaregiver = await HealthcareProfessional.create({
+    const newhealthcareprofessional = await HealthcareProfessional.create({
       UserId:userId,
       Speciality:speciality,
       StructureId:structureId,
@@ -213,17 +206,11 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
       UpdatedAt: new Date(),
     });
 
-    // On ajoute le rôle HEALTHCAREPROFESSIONAL
-    const rolesArray = existingUser.Roles ? existingUser.Roles.split(',') : [];
-    if (!rolesArray.includes(RolesEnum.HEALTHCAREPROFESSIONAL)) {
-      rolesArray.push(RolesEnum.HEALTHCAREPROFESSIONAL);
-      existingUser.Roles = rolesArray.join(',');
-      await existingUser.save();
-    }
+    addUserRole(existingUser, RolesEnum.HEALTHCAREPROFESSIONAL);
 
     return res.status(201).json({
       message: 'Professionnel de soins enregistré avec succès.',
-      patient: newCaregiver,
+      patient: newhealthcareprofessional,
     });
   } 
   catch (error) 

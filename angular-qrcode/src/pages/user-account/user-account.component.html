@@ -10,7 +10,7 @@
       <a class="nav-link" [class.active]="activeTab === 'patient'" (click)="activeTab = 'patient'">Patient</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" [class.active]="activeTab === 'caregiver'" (click)="activeTab = 'caregiver'">Professionnel</a>
+      <a class="nav-link" [class.active]="activeTab === 'healthcareprofessional'" (click)="activeTab = 'healthcareprofessional'">Professionnel</a>
     </li>
   </ul>
 
@@ -33,17 +33,17 @@
     </div>
 
     <!-- Onglet Professionnel -->
-    <div *ngIf="activeTab === 'caregiver'" class="tab-pane active">
-      <ng-container *ngIf="user.HealthcareProfessional; else notCaregiver">
+    <div *ngIf="activeTab === 'healthcareprofessional'" class="tab-pane active">
+      <ng-container *ngIf="user.HealthcareProfessional; else nothealthcareprofessional">
         <h5>Informations Professionnel</h5>
         <p><strong>Spécialité :</strong> {{ user.HealthcareProfessional?.Speciality }}</p>
         <p><strong>Structure :</strong> {{ user.HealthcareProfessional?.StructureId || 'Non assignée' }}</p>
         <p><strong>IDN :</strong> {{ user.HealthcareProfessional?.IDN }}</p>
       </ng-container>
 
-      <ng-template #notCaregiver>
+      <ng-template #nothealthcareprofessional>
         <p>Vous n'avez pas encore de profil professionnel de santé.</p>
-        <button class="btn btn-primary" (click)="goToRegister('caregiver')">Devenir Professionnel</button>
+        <button class="btn btn-primary" (click)="goToRegister('healthcareprofessional')">Devenir Professionnel</button>
       </ng-template>
     </div>
   </div>

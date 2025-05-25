@@ -38,7 +38,7 @@ export class ManageActsComponent implements OnInit {
 
   toggleAct(act: HealthcareAct): void {
     if (this.isLinked(act)) {
-      this.http.delete(`${environment.urls.back}/healthcare/act/caregiver/${act.Id}`).subscribe({
+      this.http.delete(`${environment.urls.back}/healthcare/act/healthcareprofessional/${act.Id}`).subscribe({
         next: () => {
           console.log("Acte supprimé")
           this.linkedActs = this.linkedActs.filter(a => a.Id !== act.Id);
@@ -48,7 +48,7 @@ export class ManageActsComponent implements OnInit {
     } else {
       const payload = { healthcareActId: act.Id };
 
-      this.http.post(`${environment.urls.back}/healthcare/act/caregiver`, payload).subscribe({
+      this.http.post(`${environment.urls.back}/healthcare/act/healthcareprofessional`, payload).subscribe({
         next: () => {
           console.log("Acte ajouté")
           this.linkedActs.push(act); // mise à jour immédiate

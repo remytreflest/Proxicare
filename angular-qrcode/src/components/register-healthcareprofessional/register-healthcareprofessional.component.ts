@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environment';
@@ -7,13 +7,13 @@ import { SpecialityEnum } from '../../resources/specialityEnum';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-register-caregiver',
+  selector: 'app-register-healthcareprofessional',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './register-caregiver.component.html',
-  styleUrl: './register-caregiver.component.scss'
+  templateUrl: './register-healthcareprofessional.component.html',
+  styleUrl: './register-healthcareprofessional.component.scss'
 })
-export class RegisterCaregiverComponent {
+export class RegisterhealthcareprofessionalComponent {
   form!: FormGroup;
   specialities = enumToArray(SpecialityEnum); // adapte selon ton enum
   structures: any[] = [];
@@ -44,7 +44,7 @@ export class RegisterCaregiverComponent {
       idn: formValue.idn,
     };
 
-    this.http.post(`${environment.urls.back}/register/caregiver`, payload).subscribe({
+    this.http.post(`${environment.urls.back}/register/healthcareprofessional`, payload).subscribe({
       next: (res) => console.log('Soignant créé avec succès :', res),
       error: (err) => console.error('Erreur lors de la création du soignant', err),
     });

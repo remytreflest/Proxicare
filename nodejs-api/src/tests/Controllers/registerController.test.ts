@@ -166,10 +166,10 @@ describe('Register Controller', () => {
 
   });
 
-  describe('POST /register/caregiver', () => {
+  describe('POST /register/healthcareprofessional', () => {
 
     const mockSave = jest.fn();
-    const mockCaregiver = {
+    const mockhealthcareprofessional = {
         speciality: SpecialityEnum.NURSE,
         structureId: 1,
         idn: '123456',
@@ -180,40 +180,40 @@ describe('Register Controller', () => {
       jest.clearAllMocks();
     });
   
-    it('should return 201 if caregiver is created', async () => {
+    it('should return 201 if healthcareprofessional is created', async () => {
   
-      (User.findByPk as jest.Mock).mockResolvedValue(mockCaregiver);
+      (User.findByPk as jest.Mock).mockResolvedValue(mockhealthcareprofessional);
       (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
-      (HealthcareProfessional.create as jest.Mock).mockResolvedValue(mockCaregiver);
+      (HealthcareProfessional.create as jest.Mock).mockResolvedValue(mockhealthcareprofessional);
   
       const res = await request(app)
-        .post('/api/register/caregiver')
-        .send(mockCaregiver);
+        .post('/api/register/healthcareprofessional')
+        .send(mockhealthcareprofessional);
   
       expect(res.statusCode).toBe(201);
     });
   
     it('should return 400 if params left', async () => {
-      let mockCaregiver = {
+      let mockhealthcareprofessional = {
         userId: '123',
       }
 
       const res = await request(app)
-        .post('/api/register/caregiver')
-        .send(mockCaregiver);
+        .post('/api/register/healthcareprofessional')
+        .send(mockhealthcareprofessional);
   
       expect(res.statusCode).toBe(400);
     });
 
     it('should return 400 if enum isn\'t valid', async () => {
-      let mockCaregiver = {
+      let mockhealthcareprofessional = {
         userId: '123',
         speciality: 'untrucfaux'
       }
 
       const res = await request(app)
-        .post('/api/register/caregiver')
-        .send(mockCaregiver);
+        .post('/api/register/healthcareprofessional')
+        .send(mockhealthcareprofessional);
   
       expect(res.statusCode).toBe(400);
     });
@@ -223,20 +223,20 @@ describe('Register Controller', () => {
       (User.findByPk as jest.Mock).mockResolvedValue(null);
   
       const res = await request(app)
-        .post('/api/register/caregiver')
-        .send(mockCaregiver);
+        .post('/api/register/healthcareprofessional')
+        .send(mockhealthcareprofessional);
   
       expect(res.statusCode).toBe(404);
     });
   
-    it('should return 409 if caregiver with userId already exist', async () => {
+    it('should return 409 if healthcareprofessional with userId already exist', async () => {
   
       (User.findByPk as jest.Mock).mockResolvedValue({ id: "123" });
       (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({ id: '456' });  
   
       const res = await request(app)
-        .post('/api/register/caregiver')
-        .send(mockCaregiver);
+        .post('/api/register/healthcareprofessional')
+        .send(mockhealthcareprofessional);
   
       expect(res.statusCode).toBe(409);
     });
@@ -246,8 +246,8 @@ describe('Register Controller', () => {
       (User.findByPk as jest.Mock).mockRejectedValue(new Error('DB uncatchable'));  
   
       const res = await request(app)
-        .post('/api/register/caregiver')
-        .send(mockCaregiver);
+        .post('/api/register/healthcareprofessional')
+        .send(mockhealthcareprofessional);
   
       expect(res.statusCode).toBe(500);
     });

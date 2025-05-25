@@ -5,10 +5,10 @@ import { PlanningComponent } from '../pages/planning/planning.component';
 import { RegisterComponent } from '../pages/register/register.component';
 import { roleGuard } from '../guards/roleGuard';
 import { RolesEnum } from '../resources/rolesEnum';
-import { RegisterCaregiverComponent } from '../components/register-caregiver/register-caregiver.component';
 import { UserAccountComponent } from '../pages/user-account/user-account.component';
 import { RegisterPatientComponent } from '../components/register-patient/register-patient.component';
 import { ManageActsComponent } from '../pages/manage-acts/manage-acts.component';
+import { RegisterhealthcareprofessionalComponent } from '../components/register-healthcareprofessional/register-healthcareprofessional.component';
 
 export const routes: Routes = [
   {
@@ -20,8 +20,8 @@ export const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'register/caregiver',
-    component: RegisterCaregiverComponent
+    path: 'register/healthcareprofessional',
+    component: RegisterhealthcareprofessionalComponent
   },
   {
     path: 'register/patient',

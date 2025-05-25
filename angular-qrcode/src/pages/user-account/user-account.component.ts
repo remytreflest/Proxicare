@@ -31,7 +31,7 @@ export class UserAccountComponent implements OnInit {
 
   getInitialActiveTab() : string {
     if (this.user.HealthcareProfessional != null){
-      return 'caregiver';
+      return 'healthcareprofessional';
     }
     if (this.user.Patient != null){
       return 'patient';
@@ -39,7 +39,7 @@ export class UserAccountComponent implements OnInit {
     return '';
   }
 
-  goToRegister(type: 'patient' | 'caregiver') {
+  goToRegister(type: 'patient' | 'healthcareprofessional') {
     this.router.navigate([`/register/${type}`]);
   }
 }

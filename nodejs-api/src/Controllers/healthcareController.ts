@@ -7,13 +7,13 @@ const router = express.Router();
 
 /**
  * Associe un professionnel de santé à un acte de soin
- * @route POST /healthcare/act/caregiver
+ * @route POST /healthcare/act/healthcareprofessional
  * @body { 
  *  HealthcareProfessionalId, 
  *  HealthcareActId 
  * }
  */
-router.post('/healthcare/act/caregiver', async (req: any, res: any) => {
+router.post('/healthcare/act/healthcareprofessional', async (req: any, res: any) => {
   try {
     const userId = req.userId;
     const { healthcareActId } = req.body;
@@ -22,8 +22,8 @@ router.post('/healthcare/act/caregiver', async (req: any, res: any) => {
       return res.status(400).json({ message: 'L\'utilisateur et l\'ID de l\'acte sont requis.' });
     }
 
-    const caregiver = await HealthcareProfessional.findOne({ where: { UserId: userId } });
-    if (!caregiver) {
+    const healthcareprofessional = await HealthcareProfessional.findOne({ where: { UserId: userId } });
+    if (!healthcareprofessional) {
       return res.status(404).json({ message: 'Le professionnel de soins est introuvable.' });
     }
 
@@ -33,7 +33,7 @@ router.post('/healthcare/act/caregiver', async (req: any, res: any) => {
     }
 
     await HealthcareProfessionalHealthcareAct.create({
-      HealthcareProfessionalId: caregiver.Id,
+      HealthcareProfessionalId: healthcareprofessional.Id,
       HealthcareActId: healthcareActId,
     });
 
@@ -45,11 +45,11 @@ router.post('/healthcare/act/caregiver', async (req: any, res: any) => {
 });
 
 /**
- * @route DELETE /healthcare/act/caregiver/:actId
+ * @route DELETE /healthcare/act/healthcareprofessional/:actId
  * @desc Supprime le lien entre un professionnel et un acte
  * @access Protégé
  */
-router.delete('/healthcare/act/caregiver/:actId', async (req: any, res: any) => {
+router.delete('/healthcare/act/healthcareprofessional/:actId', async (req: any, res: any) => {
   const userId = req.userId;
   const actId = parseInt(req.params.actId);
 
@@ -58,15 +58,15 @@ router.delete('/healthcare/act/caregiver/:actId', async (req: any, res: any) => 
   }
 
   try {
-    const caregiver = await HealthcareProfessional.findOne({ where: { UserId: userId } });
+    const healthcareprofessional = await HealthcareProfessional.findOne({ where: { UserId: userId } });
 
-    if (!caregiver) {
+    if (!healthcareprofessional) {
       return res.status(404).json({ message: 'Professionnel non trouvé.' });
     }
 
     const deleted = await HealthcareProfessionalHealthcareAct.destroy({
       where: {
-        HealthcareProfessionalId: caregiver.Id,
+        HealthcareProfessionalId: healthcareprofessional.Id,
         HealthcareActId: actId
       }
     });
@@ -160,16 +160,16 @@ router.get('/healthcare/acts/user', async (req: any, res: any) => {
   const userId = req.userId;
 
   try {
-    const caregiver = await HealthcareProfessional.findOne({
+    const healthcareprofessional = await HealthcareProfessional.findOne({
       where: { UserId: userId },
       include: [HealthcareAct]
     });
 
-    if (!caregiver) {
+    if (!healthcareprofessional) {
       return res.status(404).json({ message: 'Professionnel non trouvé.' });
     }
 
-    return res.status(200).json(caregiver.HealthcareActs);
+    return res.status(200).json(healthcareprofessional.HealthcareActs);
   } catch (error) {
     console.error('Erreur récupération actes utilisateur :', error);
     return res.status(500).json({ message: 'Erreur serveur.' });

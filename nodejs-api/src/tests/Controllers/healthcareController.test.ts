@@ -163,7 +163,7 @@ describe('Healthcare Controller', () => {
 
     });
 
-    describe('POST /healthcare/act/caregiver', () => {
+    describe('POST /healthcare/act/healthcareprofessional', () => {
 
         beforeEach(() => {
             jest.clearAllMocks();
@@ -171,40 +171,40 @@ describe('Healthcare Controller', () => {
 
         it('should return 201', async () => {
 
-            const mockedLinkActCaregiver = {
+            const mockedLinkActhealthcareprofessional = {
                 healthcareProfessionalId: '1',
                 healthcareActId: '2'
             };
         
             (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({});
             (HealthcareAct.findOne as jest.Mock).mockResolvedValue({});
-            (HealthcareProfessionalHealthcareAct.create as jest.Mock).mockResolvedValue(mockedLinkActCaregiver);
+            (HealthcareProfessionalHealthcareAct.create as jest.Mock).mockResolvedValue(mockedLinkActhealthcareprofessional);
 
             const res = await request(app)
-                .post('/api/healthcare/act/caregiver')
+                .post('/api/healthcare/act/healthcareprofessional')
                 .set('x-userId', '123')
-                .send(mockedLinkActCaregiver);
+                .send(mockedLinkActhealthcareprofessional);
         
             expect(res.statusCode).toBe(201);
         });
 
         it('should return 400 healthcareProfessionalId missing', async () => {
 
-            const mockedLinkActCaregiver = {
+            const mockedLinkActhealthcareprofessional = {
                 healthcareProfessionalId: '1'
             };
 
             const res = await request(app)
-                .post('/api/healthcare/act/caregiver')
+                .post('/api/healthcare/act/healthcareprofessional')
                 .set('x-userId', '123')
-                .send(mockedLinkActCaregiver);
+                .send(mockedLinkActhealthcareprofessional);
         
             expect(res.statusCode).toBe(400);
         });
 
         it('should return 404 HealthcareProfessional doesn\'t exist', async () => {
 
-            const mockedLinkActCaregiver = {
+            const mockedLinkActhealthcareprofessional = {
                 healthcareProfessionalId: '1',
                 healthcareActId: '2'
             };
@@ -212,16 +212,16 @@ describe('Healthcare Controller', () => {
             (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
 
             const res = await request(app)
-                .post('/api/healthcare/act/caregiver')
+                .post('/api/healthcare/act/healthcareprofessional')
                 .set('x-userId', '123')
-                .send(mockedLinkActCaregiver);
+                .send(mockedLinkActhealthcareprofessional);
         
             expect(res.statusCode).toBe(404);
         });
 
         it('should return 404 HealthcareAct doesn\'t exist', async () => {
 
-            const mockedLinkActCaregiver = {
+            const mockedLinkActhealthcareprofessional = {
                 healthcareProfessionalId: '1',
                 healthcareActId: '2'
             };
@@ -230,16 +230,16 @@ describe('Healthcare Controller', () => {
             (HealthcareAct.findOne as jest.Mock).mockResolvedValue(null);
 
             const res = await request(app)
-                .post('/api/healthcare/act/caregiver')
+                .post('/api/healthcare/act/healthcareprofessional')
                 .set('x-userId', '123')
-                .send(mockedLinkActCaregiver);
+                .send(mockedLinkActhealthcareprofessional);
         
             expect(res.statusCode).toBe(404);
         });
 
         it('should return 500', async () => {
 
-            const mockedLinkActCaregiver = {
+            const mockedLinkActhealthcareprofessional = {
                 healthcareProfessionalId: '1',
                 healthcareActId: '2'
             };
@@ -247,9 +247,9 @@ describe('Healthcare Controller', () => {
             (HealthcareProfessional.findOne as jest.Mock).mockRejectedValue(new Error('DB uncatchable'));
 
             const res = await request(app)
-                .post('/api/healthcare/act/caregiver')
+                .post('/api/healthcare/act/healthcareprofessional')
                 .set('x-userId', '123')
-                .send(mockedLinkActCaregiver);
+                .send(mockedLinkActhealthcareprofessional);
         
             expect(res.statusCode).toBe(500);
         });

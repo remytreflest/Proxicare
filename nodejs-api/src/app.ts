@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 const AUTH_TOKEN_CHECK = checkJwt;
 const unprotectedPath = [
-  { url: '/api/qrcode/caregiver', methods: ['GET'] }
+  { url: '/api/qrcode/healthcareprofessional', methods: ['GET'] }
 ];
   
 app.use(express.json());
