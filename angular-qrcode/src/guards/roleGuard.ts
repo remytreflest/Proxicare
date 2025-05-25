@@ -19,3 +19,15 @@ export const rolesGuard = (requiredRoles: RolesEnum[]): CanActivateFn => () => {
   })
   return hasRoles;
 };
+
+export const rolesAtLeastOneGuard = (requiredRoles: RolesEnum[]): CanActivateFn => () => {
+  let hasRoles = false;
+  const userService = inject(UserService);
+
+  requiredRoles.forEach((role: RolesEnum) => {
+    if(userService.hasRole(role)){
+      hasRoles = true;
+    }
+  })
+  return hasRoles;
+};

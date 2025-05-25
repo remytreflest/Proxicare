@@ -3,7 +3,7 @@ import { AppComponent } from '../components/base/app.component';
 import { DashboardComponent } from '../pages/dashboard/dashboard.component';
 import { PlanningComponent } from '../pages/planning/planning.component';
 import { RegisterComponent } from '../pages/register/register.component';
-import { roleGuard } from '../guards/roleGuard';
+import { roleGuard, rolesAtLeastOneGuard, rolesGuard } from '../guards/roleGuard';
 import { RolesEnum } from '../resources/rolesEnum';
 import { UserAccountComponent } from '../pages/user-account/user-account.component';
 import { RegisterPatientComponent } from '../components/register-patient/register-patient.component';
@@ -42,6 +42,6 @@ export const routes: Routes = [
   {
     path: 'planning',
     component: PlanningComponent,
-    canActivate: [roleGuard(RolesEnum.ADMIN)]
+    canActivate: [rolesAtLeastOneGuard([RolesEnum.PATIENT, RolesEnum.HEALTHCAREPROFESSIONAL])]
   },
 ];

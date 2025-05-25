@@ -8,6 +8,7 @@ import {
 import { Subscription } from 'rxjs';
 import { UserService } from '../services/userService';
 import { toRoleEnum } from '../herlpers/enumHelper';
+import { RolesEnum } from '../resources/rolesEnum';
 
 @Directive({
   selector: '[hasRole]',
@@ -16,7 +17,6 @@ import { toRoleEnum } from '../herlpers/enumHelper';
 export class HasRoleDirective implements OnDestroy {
   private rolesSub?: Subscription;
   private hasView = false;
-  private expectedRole: string | null = null;
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -25,16 +25,19 @@ export class HasRoleDirective implements OnDestroy {
   ) {}
 
   @Input()
-  set hasRole(role: string) {
-    this.expectedRole = role;
+  set hasRole(roles: string | string[]) {
+    const rolesArray = Array.isArray(roles) ? roles : [roles];
+    this.expectedRoles = rolesArray;
     this.rolesSub?.unsubscribe();
     this.rolesSub = this.userService.rolesLoaded$.subscribe((loaded) => {
       this.updateView(loaded);
     });
   }
 
+  private expectedRoles: string[] = [];
+
   private updateView(loaded: boolean) {
-    if (!loaded || !this.expectedRole) {
+    if (!loaded || this.expectedRoles.length === 0) {
       this.clearView();
       return;
     }
@@ -45,15 +48,12 @@ export class HasRoleDirective implements OnDestroy {
       return;
     }
 
-    const role = toRoleEnum(this.expectedRole);
+    // Convertit les rôles en enum valides
+    const expectedEnums = this.expectedRoles
+      .map(toRoleEnum)
+      .filter((r): r is RolesEnum => r !== null)
 
-    if (role == null)
-    {
-      this.clearView();
-      return;
-    }
-
-    let hasRole = this.userService.hasRole(role);
+    const hasRole = expectedEnums.some((r) => this.userService.hasRole(r));
 
     if (hasRole && !this.hasView) {
       this.viewContainer.createEmbeddedView(this.templateRef);

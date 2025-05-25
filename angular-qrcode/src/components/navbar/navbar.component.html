@@ -20,7 +20,7 @@
     <!-- Links -->
     <div class="collapse navbar-collapse" id="navbarMenu">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <li *hasRole="[RolesEnum.PATIENT, RolesEnum.HEALTHCAREPROFESSIONAL]" class="nav-item">
           <a class="nav-link" routerLink="/planning">Planning</a>
         </li>
         <li *hasRole="RolesEnum.ADMIN" class="nav-item">
