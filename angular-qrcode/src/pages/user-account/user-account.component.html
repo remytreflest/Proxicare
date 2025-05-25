@@ -1,0 +1,51 @@
+<div *ngIf="user">
+  <h3>Mon compte</h3>
+  <p><strong>Nom :</strong> {{ user.LastName }}</p>
+  <p><strong>Prénom :</strong> {{ user.FirstName }}</p>
+  <p><strong>Email :</strong> {{ user.Email }}</p>
+  <p><strong>Rôles :</strong> {{ user.Roles }}</p>
+
+  <!-- Onglets toujours visibles -->
+  <ul class="nav nav-tabs mt-4">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'patient'" (click)="activeTab = 'patient'">Patient</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'caregiver'" (click)="activeTab = 'caregiver'">Professionnel</a>
+    </li>
+  </ul>
+
+  <!-- Contenu des onglets -->
+  <div class="tab-content border p-3 mt-2">
+    <!-- Onglet Patient -->
+    <div *ngIf="activeTab === 'patient'" class="tab-pane active">
+      <ng-container *ngIf="user.Patient; else notPatient">
+        <h5>Informations Patient</h5>
+        <p><strong>Date de naissance :</strong> {{ user.Patient?.Birthday }}</p>
+        <p><strong>Genre :</strong> {{ user.Patient?.Gender }}</p>
+        <p><strong>Adresse :</strong> {{ user.Patient?.Address }}</p>
+        <p><strong>N° Sécurité Sociale :</strong> {{ user.Patient?.SocialSecurityNumber }}</p>
+      </ng-container>
+
+      <ng-template #notPatient>
+        <p>Vous n'avez pas encore de profil patient.</p>
+        <button class="btn btn-primary" (click)="goToRegister('patient')">Devenir Patient</button>
+      </ng-template>
+    </div>
+
+    <!-- Onglet Professionnel -->
+    <div *ngIf="activeTab === 'caregiver'" class="tab-pane active">
+      <ng-container *ngIf="user.HealthcareProfessional; else notCaregiver">
+        <h5>Informations Professionnel</h5>
+        <p><strong>Spécialité :</strong> {{ user.HealthcareProfessional?.Speciality }}</p>
+        <p><strong>Structure :</strong> {{ user.HealthcareProfessional?.StructureId || 'Non assignée' }}</p>
+        <p><strong>IDN :</strong> {{ user.HealthcareProfessional?.IDN }}</p>
+      </ng-container>
+
+      <ng-template #notCaregiver>
+        <p>Vous n'avez pas encore de profil professionnel de santé.</p>
+        <button class="btn btn-primary" (click)="goToRegister('caregiver')">Devenir Professionnel</button>
+      </ng-template>
+    </div>
+  </div>
+</div>

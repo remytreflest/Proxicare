@@ -6,6 +6,8 @@ import { RegisterComponent } from '../pages/register/register.component';
 import { roleGuard } from '../guards/roleGuard';
 import { RolesEnum } from '../resources/rolesEnum';
 import { RegisterCaregiverComponent } from '../components/register-caregiver/register-caregiver.component';
+import { UserAccountComponent } from '../pages/user-account/user-account.component';
+import { RegisterPatientComponent } from '../components/register-patient/register-patient.component';
 
 export const routes: Routes = [
   {
@@ -21,8 +23,16 @@ export const routes: Routes = [
     component: RegisterCaregiverComponent
   },
   {
+    path: 'register/patient',
+    component: RegisterPatientComponent
+  },
+  {
     path: 'dashboard',
     component: DashboardComponent
+  },
+  {
+    path: 'account',
+    component: UserAccountComponent
   },
   {
     path: 'planning',

@@ -5,14 +5,7 @@ import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { environment } from '../environment';
 import { AuthService } from '@auth0/auth0-angular';
 import { RolesEnum } from '../resources/rolesEnum';
-
-export interface User {
-  Id: string;
-  FirstName: string;
-  LastName: string;
-  Email: string;
-  Role: string;
-}
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +19,11 @@ export class UserService {
   constructor(private http: HttpClient, private router: Router, private auth: AuthService) {}
 
   getUserById(userId: string): void {
-    this.http.get<User>(`${environment.urls.back}/register/user`).subscribe({
+    this.http.get<User>(`${environment.urls.back}/user`).subscribe({
       next: (user) => {
         console.log("Utilisateur connecté")
-        console.log(this.user)
         this.user = user
+        console.log(this.user)
         this.rolesLoadedSubject.next(true);
       },
       error: (err) => {
@@ -48,7 +41,7 @@ export class UserService {
     if (this.user == null)
       return null;
 
-    return this.user.Role.split(',')
+    return this.user.Roles.split(',')
       .map(r => r.trim())
       .filter(r => Object.values(RolesEnum).includes(r as RolesEnum))
       .map(r => r as RolesEnum);
@@ -78,8 +71,6 @@ export class UserService {
       }
       userDto.email = email;
     });
-
-    console.log(userDto)
 
     return this.http.post<User>(`${environment.urls.back}/register/user`, userDto).pipe(
       map((res) => {

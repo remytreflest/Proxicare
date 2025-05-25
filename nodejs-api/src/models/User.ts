@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '@/config/database';
-import { RolesEnum } from '@/resources/emuns/rolesEnum';
+import Patient from './Patient';
+import HealthcareProfessional from './HealthcareProfessional';
 
 export class User extends Model {
   public Id!: number;
@@ -9,6 +10,8 @@ export class User extends Model {
   public Email!: string;
   public Roles!: string;
   public CreatedAt!: Date;
+  public Patient!: Patient;
+  public HealthcareProfessional!: HealthcareProfessional;
 }
 
 User.init({

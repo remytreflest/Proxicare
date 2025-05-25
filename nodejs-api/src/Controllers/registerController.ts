@@ -13,7 +13,7 @@ const router = express.Router();
  * @description Récupère un utilisateur par son GUID
  * @access Authentifié (ou public si besoin)
  */
-router.get('/register/user', async (req: any, res: any) => {
+router.get('/user', async (req: any, res: any) => {
   const userId = req.userId;
 
   if (!userId) {
@@ -21,7 +21,9 @@ router.get('/register/user', async (req: any, res: any) => {
   }
 
   try {
-    const user = await User.findByPk(userId);
+    let user = await User.findByPk(userId, {
+      include: [Patient, HealthcareProfessional]
+    });
 
     if (!user) {
       return res.status(404).json({ message: "Utilisateur introuvable." });
