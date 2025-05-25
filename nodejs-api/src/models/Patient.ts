@@ -37,21 +37,17 @@ Patient.init({
     allowNull: false,
     unique: true,
   },
-  CreatedAt: {
-    type: DataTypes.DATE,
+  StructureId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-  UpdatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
   }
 }, {
   sequelize,
   modelName: 'Patient',
   tableName: 'Patients',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });
 
 export default Patient;

@@ -15,7 +15,17 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
     Address: {
       type: DataTypes.STRING(255),
       allowNull: false,
-    }
+    },
+    CreatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    UpdatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   });
 
   // Table d'association
@@ -39,7 +49,17 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       },
       onDelete: 'CASCADE',
       primaryKey: true,
-    }
+    },
+    CreatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    UpdatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   });
 }
 

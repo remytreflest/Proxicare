@@ -21,5 +21,7 @@ HealthcareProfessionalStructure.init({
   sequelize,
   modelName: 'HealthcareProfessionalStructure',
   tableName: 'HealthcareProfessionalStructures',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });

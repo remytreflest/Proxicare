@@ -5,6 +5,7 @@ import { environment } from '../../environment';
 import { enumToArray } from '../../herlpers/enumHelper';
 import { SpecialityEnum } from '../../resources/specialityEnum';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-healthcareprofessional',
@@ -18,7 +19,7 @@ export class RegisterhealthcareprofessionalComponent {
   specialities = enumToArray(SpecialityEnum); // adapte selon ton enum
   structures: any[] = [];
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -45,7 +46,7 @@ export class RegisterhealthcareprofessionalComponent {
     };
 
     this.http.post(`${environment.urls.back}/register/healthcareprofessional`, payload).subscribe({
-      next: (res) => console.log('Soignant créé avec succès :', res),
+      next: (res) => this.router.navigate(['/account']),
       error: (err) => console.error('Erreur lors de la création du soignant', err),
     });
   }

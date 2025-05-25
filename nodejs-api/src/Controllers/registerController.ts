@@ -6,6 +6,7 @@ import { SpecialityEnum } from '@/resources/emuns/speciality';
 import HealthcareProfessional from '@/models/HealthcareProfessional';
 import { joinRoles } from '@/helpers/controllers/registerHelper';
 import { addUserRole } from '@/resources/helpers/userHelper';
+import { Structure } from '@/models/Structure';
 
 const router = express.Router();
 
@@ -23,7 +24,21 @@ router.get('/user', async (req: any, res: any) => {
 
   try {
     let user = await User.findByPk(userId, {
-      include: [Patient, HealthcareProfessional]
+      include: [
+        {
+          model: Patient,
+          include: [Structure]
+        },
+        {
+          model: HealthcareProfessional,
+          include: [
+            {
+              model: Structure,
+              through: { attributes: [] }
+            }
+          ]
+        }
+      ]
     });
 
     if (!user) {
@@ -33,6 +48,7 @@ router.get('/user', async (req: any, res: any) => {
     return res.status(200).json(user);
 
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ message: "Erreur serveur." });
   }
 });
@@ -81,8 +97,6 @@ router.post('/register/user', async (req: any, res: any) => {
       LastName:lastName,
       Email: email,
       Roles: joinRoles(roles),
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
     });
 
     return res.status(201).json(newUser);
@@ -116,9 +130,9 @@ router.post('/register/user', async (req: any, res: any) => {
 router.post('/register/patient', async (req: any, res: any) => {
   try {
     const userId = req.userId;
-    const { birthday, gender, address, socialSecurityNumber } = req.body;
+    const { birthday, gender, address, socialSecurityNumber, structureId } = req.body;
 
-    if (!birthday || !gender || !address || !socialSecurityNumber) {
+    if (!birthday || !gender || !address || !socialSecurityNumber || isNaN(structureId) || structureId <= 0) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
@@ -139,8 +153,7 @@ router.post('/register/patient', async (req: any, res: any) => {
       Gender:gender,
       Address: address || '', 
       SocialSecurityNumber:socialSecurityNumber,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
+      StructureId: structureId,
     });
 
     addUserRole(existingUser, RolesEnum.PATIENT);
@@ -197,20 +210,20 @@ router.post('/register/healthcareprofessional', async (req: any, res: any ) => {
       return res.status(409).json({ error: 'Un utilisateur avec cet ID existe déjà' });
     }
 
-    const newhealthcareprofessional = await HealthcareProfessional.create({
+    const newHealthcareProfessional = await HealthcareProfessional.create({
       UserId:userId,
       Speciality:speciality,
       StructureId:structureId,
       IDN:idn,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
     });
+
+    await newHealthcareProfessional.addStructure(structureId);
 
     addUserRole(existingUser, RolesEnum.HEALTHCAREPROFESSIONAL);
 
     return res.status(201).json({
       message: 'Professionnel de soins enregistré avec succès.',
-      patient: newhealthcareprofessional,
+      patient: newHealthcareProfessional ,
     });
   } 
   catch (error) 

@@ -24,6 +24,7 @@
         <p><strong>Genre :</strong> {{ user.Patient?.Gender }}</p>
         <p><strong>Adresse :</strong> {{ user.Patient?.Address }}</p>
         <p><strong>N° Sécurité Sociale :</strong> {{ user.Patient?.SocialSecurityNumber }}</p>
+        <p><strong>Structure :</strong> {{ user.Patient?.Structure?.Name || 'Non assignée' }}</p>
       </ng-container>
 
       <ng-template #notPatient>
@@ -37,7 +38,14 @@
       <ng-container *ngIf="user.HealthcareProfessional; else nothealthcareprofessional">
         <h5>Informations Professionnel</h5>
         <p><strong>Spécialité :</strong> {{ user.HealthcareProfessional?.Speciality }}</p>
-        <p><strong>Structure :</strong> {{ user.HealthcareProfessional?.StructureId || 'Non assignée' }}</p>
+        <p><strong>Structures :</strong>
+          <span *ngIf="user.HealthcareProfessional?.Structures?.length; else noStruct">
+            <span *ngFor="let s of user.HealthcareProfessional.Structures; let i = index">
+              {{ s.Name }}<span *ngIf="i < user.HealthcareProfessional.Structures!.length - 1">, </span>
+            </span>
+          </span>
+          <ng-template #noStruct>Non assigné</ng-template>
+        </p>
         <p><strong>IDN :</strong> {{ user.HealthcareProfessional?.IDN }}</p>
       </ng-container>
 

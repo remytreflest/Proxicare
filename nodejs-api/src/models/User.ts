@@ -37,19 +37,12 @@ User.init({
   Roles: {
     type: DataTypes.STRING(255),
     allowNull: false,
-  },
-  CreatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-  UpdatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
+  }
 }, {
   sequelize,
   modelName: 'User',
   tableName: 'Users',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });

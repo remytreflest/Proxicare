@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterPatientComponent implements OnInit {
   form!: FormGroup;
+  structures: any[] = [];
   message = '';
 
   constructor(
@@ -27,6 +28,12 @@ export class RegisterPatientComponent implements OnInit {
       gender: ['', Validators.required],
       address: ['', Validators.required],
       socialSecurityNumber: ['', Validators.required],
+      structureId: ['', Validators.required],
+    });
+
+    this.http.get(`${environment.urls.back}/structures`).subscribe({
+      next: (data: any) => this.structures = data,
+      error: () => console.error('Erreur récupération structures')
     });
   }
 

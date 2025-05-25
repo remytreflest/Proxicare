@@ -30,13 +30,10 @@ export class UserAccountComponent implements OnInit {
   }
 
   getInitialActiveTab() : string {
-    if (this.user.HealthcareProfessional != null){
+    if (this.user.Patient == null && this.user.HealthcareProfessional != null){
       return 'healthcareprofessional';
     }
-    if (this.user.Patient != null){
-      return 'patient';
-    }
-    return '';
+    return 'patient';
   }
 
   goToRegister(type: 'patient' | 'healthcareprofessional') {

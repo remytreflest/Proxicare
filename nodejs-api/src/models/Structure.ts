@@ -25,5 +25,7 @@ Structure.init({
   sequelize,
   modelName: 'Structure',
   tableName: 'Structures',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });

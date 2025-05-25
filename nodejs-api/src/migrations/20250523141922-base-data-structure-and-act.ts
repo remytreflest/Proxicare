@@ -3,11 +3,11 @@ import { QueryInterface, DataTypes } from 'sequelize';
 export async function up(queryInterface: QueryInterface): Promise<void> {
     
   await queryInterface.bulkInsert('Structures', [
-      { Name: 'Clinique Saint-Louis', Address: '12 rue de la santé' },
-      { Name: 'Hôpital du Centre', Address: '5 avenue du Général' },
-      { Name: 'Maison Médicale Belleville', Address: '32 rue des Lilas' },
-      { Name: 'Cabinet Infirmier Rivière', Address: '18 impasse du Moulin' },
-      { Name: 'Centre Médical Victor Hugo', Address: '2 boulevard Victor Hugo' },
+      { Name: 'Clinique Saint-Louis', Address: '12 rue de la santé', CreatedAt: new Date(), UpdatedAt: new Date() },
+      { Name: 'Hôpital du Centre', Address: '5 avenue du Général', CreatedAt: new Date(), UpdatedAt: new Date() },
+      { Name: 'Maison Médicale Belleville', Address: '32 rue des Lilas', CreatedAt: new Date(), UpdatedAt: new Date() },
+      { Name: 'Cabinet Infirmier Rivière', Address: '18 impasse du Moulin', CreatedAt: new Date(), UpdatedAt: new Date() },
+      { Name: 'Centre Médical Victor Hugo', Address: '2 boulevard Victor Hugo', CreatedAt: new Date(), UpdatedAt: new Date() },
   ]);
 
   await queryInterface.bulkInsert('HealthcareActs', [

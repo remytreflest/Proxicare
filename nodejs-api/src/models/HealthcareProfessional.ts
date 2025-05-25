@@ -2,16 +2,26 @@ import { Model, DataTypes, Association } from 'sequelize';
 import sequelize from '@/config/database';
 import HealthcareAct from '@/models/HealthcareAct';
 import { SpecialityEnum } from '@/resources/emuns/speciality';
+import { Structure } from './Structure';
 
-class HealthcareProfessional extends Model {
+export class HealthcareProfessional extends Model {
   public Id!: number;
   public UserId!: number;
-  public Speciality?: SpecialityEnum;
+  public Speciality?: string;
+  public IDN?: string;
 
+  // Associations
   public readonly HealthcareActs?: HealthcareAct[];
+  public readonly Structures?: Structure[];
+
+  // Méthodes générées par belongsToMany
+  public addStructure!: (structure: Structure | number) => Promise<void>;
+  public getStructures!: () => Promise<Structure[]>;
+  public setStructures!: (structures: Structure[] | number[]) => Promise<void>;
 
   public static associations: {
     healthcareActs: Association<HealthcareProfessional, HealthcareAct>;
+    structures: Association<HealthcareProfessional, Structure>;
   };
 }
 
@@ -36,22 +46,14 @@ HealthcareProfessional.init({
   IDN: {
     type: DataTypes.STRING(100),
     allowNull: true,
-  },
-  CreatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-  UpdatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
   }
 }, {
   sequelize,
   modelName: 'HealthcareProfessional',
   tableName: 'HealthcareProfessionals',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });
 
 export default HealthcareProfessional;

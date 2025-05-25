@@ -53,20 +53,14 @@ Appointment.init({
   ValidateTokenExpiration: {
     type: DataTypes.DATE,
     allowNull: true,
-  },
-  CreatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-  UpdatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
+  }
 }, {
   sequelize,
   modelName: 'Appointment',
   tableName: 'Appointments',
-  timestamps: false, // ou `true` si tu veux Sequelize gérer createdAt/updatedAt automatiquement
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });
 
 export default Appointment;

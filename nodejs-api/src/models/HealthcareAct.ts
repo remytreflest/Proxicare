@@ -35,21 +35,14 @@ HealthcareAct.init({
   Price: {
     type: DataTypes.FLOAT,
     allowNull: false,
-  },
-  CreatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-  UpdatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
+  }
 }, {
   sequelize,
   modelName: 'HealthcareAct',
   tableName: 'HealthcareActs',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });
 
 export default HealthcareAct;

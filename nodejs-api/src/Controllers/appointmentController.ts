@@ -145,8 +145,6 @@ router.post('/appointment', async (req: any, res: any) => {
       Status: status,
       AppointmentStartDate: appointmentStartDate,
       AppointmentEndDate: appointmentEndDate,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
     });
 
     res.status(201).json(appointment);

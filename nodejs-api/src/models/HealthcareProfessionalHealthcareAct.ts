@@ -13,22 +13,14 @@ HealthcareProfessionalHealthcareAct.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
-  },
-  CreatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-  UpdatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
   }
 }, {
   sequelize,
   modelName: 'HealthcareProfessionalHealthcareAct',
   tableName: 'HealthcareProfessionalHealthcareActs',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'CreatedAt',
+  updatedAt: 'UpdatedAt',
 });
 
 export default HealthcareProfessionalHealthcareAct;

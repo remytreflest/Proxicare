@@ -119,8 +119,8 @@ router.post('/healthcare/act', async (req: any, res: any) => {
       Name: name.trim(),
       Description: description?.trim() || null,
       Price: price,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
+      
+      
     });
 
     return res.status(201).json({

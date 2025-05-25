@@ -25,6 +25,15 @@
     <input type="text" formControlName="socialSecurityNumber" />
   </div>
 
+  <div>
+    <label for="structure">Structure</label>
+    <select formControlName="structureId">
+      <option *ngFor="let structure of structures" [value]="structure.Id">
+        {{ structure.Name }}
+      </option>
+    </select>
+  </div>
+
   <button type="submit" [disabled]="form.invalid">Créer le patient</button>
 </form>
 

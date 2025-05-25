@@ -1,3 +1,5 @@
+import { Structure } from "./structure";
+
 export interface Patient {
   Id: number;
   UserId: number;
@@ -5,4 +7,5 @@ export interface Patient {
   Gender: string;
   Address: string;
   SocialSecurityNumber: string;
+  Structure?: Structure;
 }
