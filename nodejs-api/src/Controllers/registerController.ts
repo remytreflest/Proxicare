@@ -13,8 +13,8 @@ const router = express.Router();
  * @description Récupère un utilisateur par son GUID
  * @access Authentifié (ou public si besoin)
  */
-router.get('/register/user/:id', async (req: any, res: any) => {
-  const userId = req.params.id;
+router.get('/register/user', async (req: any, res: any) => {
+  const userId = req.userId;
 
   if (!userId) {
     return res.status(400).json({ message: "ID utilisateur requis." });
@@ -58,7 +58,7 @@ router.post('/register/user', async (req: any, res: any) => {
     const { firstName, lastName, email } = req.body;
     const roles: RolesEnum[] = [RolesEnum.USER];
 
-    if (!auth0Id || !firstName || !lastName || !email ) {
+    if (!firstName || !lastName || !email ) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
@@ -112,9 +112,10 @@ router.post('/register/user', async (req: any, res: any) => {
  */
 router.post('/register/patient', async (req: any, res: any) => {
   try {
-    const { userId, birthday, gender, address, socialSecurityNumber } = req.body;
+    const userId = req.userId;
+    const { birthday, gender, address, socialSecurityNumber } = req.body;
 
-    if (!userId || !birthday || !gender || !address || !socialSecurityNumber) {
+    if (!birthday || !gender || !address || !socialSecurityNumber) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
@@ -174,7 +175,7 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
     const userId = req.userId;
     const { speciality, structureId, idn } = req.body;
 
-    if (!speciality || structureId == 0 || !idn) {
+    if (!speciality || structureId <= 0 || !idn) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
@@ -209,7 +210,6 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
   } 
   catch (error) 
   {
-    console.log(error)
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });

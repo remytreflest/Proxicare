@@ -8,6 +8,7 @@ module.exports = {
   transform: {
     "^.+\.tsx?$": ["ts-jest",{}],
   },
+  setupFilesAfterEnv: ['<rootDir>/src/tests/jest.setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^./middlewares/expressjwt.config$': '<rootDir>/__mocks__/expressjwt.config.ts'

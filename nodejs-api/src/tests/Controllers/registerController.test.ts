@@ -177,8 +177,9 @@ describe('Register Controller', () => {
   describe('POST /register/caregiver', () => {
 
     const mockCaregiver = {
-        userId: '123',
-        speciality: SpecialityEnum.NURSE
+        speciality: SpecialityEnum.NURSE,
+        structureId: 1,
+        idn: '123456'
     }
 
     beforeEach(() => {

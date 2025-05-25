@@ -26,7 +26,7 @@ export class UserService {
   constructor(private http: HttpClient, private router: Router, private auth: AuthService) {}
 
   getUserById(userId: string): void {
-    this.http.get<User>(`${environment.urls.back}/register/user/${userId}`).subscribe({
+    this.http.get<User>(`${environment.urls.back}/register/user`).subscribe({
       next: (user) => {
         console.log("Utilisateur connecté")
         console.log(this.user)
