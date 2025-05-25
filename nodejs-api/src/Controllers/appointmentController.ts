@@ -12,7 +12,7 @@ const router = express.Router();
 /**
  * @route GET /appointments
  * @description Récupère tous les rendez-vous liés à l'utilisateur (en tant que patient et/ou professionnel)
- * @access Authentifié (header x-userId requis)
+ * @access Protégé
  * 
  * @returns
  * - 200 : Liste des rendez-vous
@@ -71,6 +71,7 @@ router.get('/appointments', async (req: any, res: any) => {
  *   appointmentStartDate: Date,
  *   appointmentEndDate: Date
  * }
+ * @access Protégé
  */
 router.post('/appointment', async (req: any, res: any) => {
     
@@ -146,7 +147,7 @@ router.post('/appointment', async (req: any, res: any) => {
  * @route DELETE /appointment/:id
  * @description Supprime un rendez-vous à partir de son ID, si l'utilisateur est autorisé (soit le patient, soit le professionnel de santé concerné).
  * 
- * @access Authentifié (l'utilisateur doit être identifié via le middleware qui renseigne req.userId)
+ * @access Protégé
  * 
  * @param {number} id - L'identifiant du rendez-vous à supprimer (passé en paramètre d'URL)
  * 

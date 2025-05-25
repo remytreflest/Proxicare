@@ -30,7 +30,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/user')
-        .set('x-userId', '123')
         .send(mockUser);
   
       expect(res.statusCode).toBe(201);
@@ -45,7 +44,6 @@ describe('Register Controller', () => {
 
       const res = await request(app)
         .post('/api/register/user')
-        .set('x-userId', '123')
         .send(mockUser);
   
       expect(res.statusCode).toBe(400);
@@ -57,7 +55,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/user')
-        .set('x-userId', '123')
         .send(mockUser);
   
       expect(res.statusCode).toBe(409);
@@ -71,7 +68,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/user')
-        .set('x-userId', '123')
         .send(mockUser);
   
       expect(res.statusCode).toBe(409);
@@ -83,7 +79,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/user')
-        .set('x-userId', '123')
         .send(mockUser);
   
       expect(res.statusCode).toBe(500);
@@ -93,12 +88,14 @@ describe('Register Controller', () => {
 
   describe('POST /register/patient', () => {
 
+    const mockSave = jest.fn();
     const mockPatient = {
         userId: '123',
         birthday: '1991/06/18',
         gender: 'M',
         address: '100 avenue de château',
         socialSecurityNumber: '12345678912345',
+        save: mockSave
     }
 
     beforeEach(() => {
@@ -107,13 +104,12 @@ describe('Register Controller', () => {
   
     it('should return 201 if patient is created', async () => {
   
-      (User.findByPk as jest.Mock).mockResolvedValue({ id: '123'});
+      (User.findByPk as jest.Mock).mockResolvedValue(mockPatient);
       (Patient.create as jest.Mock).mockResolvedValue(mockPatient);
       (Patient.findOne as jest.Mock).mockResolvedValue(null);
   
       const res = await request(app)
         .post('/api/register/patient')
-        .set('x-userId', '123')
         .send(mockPatient);
   
       expect(res.statusCode).toBe(201);
@@ -129,7 +125,6 @@ describe('Register Controller', () => {
 
       const res = await request(app)
         .post('/api/register/patient')
-        .set('x-userId', '123')
         .send(mockPatient);
   
       expect(res.statusCode).toBe(400);
@@ -141,7 +136,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/patient')
-        .set('x-userId', '123')
         .send(mockPatient);
   
       expect(res.statusCode).toBe(404);
@@ -154,7 +148,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/patient')
-        .set('x-userId', '123')
         .send(mockPatient);
   
       expect(res.statusCode).toBe(409);
@@ -166,7 +159,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/patient')
-        .set('x-userId', '123')
         .send(mockPatient);
   
       expect(res.statusCode).toBe(500);
@@ -176,10 +168,12 @@ describe('Register Controller', () => {
 
   describe('POST /register/caregiver', () => {
 
+    const mockSave = jest.fn();
     const mockCaregiver = {
         speciality: SpecialityEnum.NURSE,
         structureId: 1,
-        idn: '123456'
+        idn: '123456',
+        save: mockSave
     }
 
     beforeEach(() => {
@@ -188,13 +182,12 @@ describe('Register Controller', () => {
   
     it('should return 201 if caregiver is created', async () => {
   
-      (User.findByPk as jest.Mock).mockResolvedValue({ id: '123'});
+      (User.findByPk as jest.Mock).mockResolvedValue(mockCaregiver);
       (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
       (HealthcareProfessional.create as jest.Mock).mockResolvedValue(mockCaregiver);
   
       const res = await request(app)
         .post('/api/register/caregiver')
-        .set('x-userId', '123')
         .send(mockCaregiver);
   
       expect(res.statusCode).toBe(201);
@@ -207,7 +200,6 @@ describe('Register Controller', () => {
 
       const res = await request(app)
         .post('/api/register/caregiver')
-        .set('x-userId', '123')
         .send(mockCaregiver);
   
       expect(res.statusCode).toBe(400);
@@ -221,7 +213,6 @@ describe('Register Controller', () => {
 
       const res = await request(app)
         .post('/api/register/caregiver')
-        .set('x-userId', '123')
         .send(mockCaregiver);
   
       expect(res.statusCode).toBe(400);
@@ -233,7 +224,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/caregiver')
-        .set('x-userId', '123')
         .send(mockCaregiver);
   
       expect(res.statusCode).toBe(404);
@@ -246,7 +236,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/caregiver')
-        .set('x-userId', '123')
         .send(mockCaregiver);
   
       expect(res.statusCode).toBe(409);
@@ -258,7 +247,6 @@ describe('Register Controller', () => {
   
       const res = await request(app)
         .post('/api/register/caregiver')
-        .set('x-userId', '123')
         .send(mockCaregiver);
   
       expect(res.statusCode).toBe(500);

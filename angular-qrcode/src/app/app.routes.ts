@@ -8,6 +8,7 @@ import { RolesEnum } from '../resources/rolesEnum';
 import { RegisterCaregiverComponent } from '../components/register-caregiver/register-caregiver.component';
 import { UserAccountComponent } from '../pages/user-account/user-account.component';
 import { RegisterPatientComponent } from '../components/register-patient/register-patient.component';
+import { ManageActsComponent } from '../pages/manage-acts/manage-acts.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
   {
     path: 'register/patient',
     component: RegisterPatientComponent
+  },
+  {
+    path: 'manage-acts',
+    component: ManageActsComponent
   },
   {
     path: 'dashboard',

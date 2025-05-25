@@ -6,6 +6,7 @@ const router = express.Router();
 /**
  * @route GET /structures
  * @desc Retourne toutes les structures médicales
+ * @access Protégé
  */
 router.get('/structures', async (req: any, res: any) => {
   try {

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/userService';
-import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +14,7 @@ export class RegisterUserComponent {
 
   userForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private auth: AuthService, private router: Router)
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router)
   {
     this.userForm = this.fb.group({
       FirstName: ['', Validators.required],

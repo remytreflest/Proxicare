@@ -11,7 +11,7 @@ const router = express.Router();
 /**
  * @route GET /register/user/:id
  * @description Récupère un utilisateur par son GUID
- * @access Authentifié (ou public si besoin)
+ * @access Protégé
  */
 router.get('/user', async (req: any, res: any) => {
   const userId = req.userId;
@@ -40,7 +40,7 @@ router.get('/user', async (req: any, res: any) => {
  * @route POST /register/user
  * @description Crée un nouvel utilisateur dans la base de données avec un rôle générique `USER`.
  * 
- * @access Public
+ * @access Protégé
  * 
  * @body
  * - id: string (requis) — Identifiant unique fourni par une tierce partie
@@ -96,7 +96,7 @@ router.post('/register/user', async (req: any, res: any) => {
  * @route POST /register/patient
  * @description Enregistre un nouveau patient dans la base de données à partir d’un utilisateur existant.
  * 
- * @access Public
+ * @access Protégé
  * 
  * @body
  * - userId: string (requis) — Identifiant de l'utilisateur existant
@@ -144,6 +144,14 @@ router.post('/register/patient', async (req: any, res: any) => {
       UpdatedAt: new Date(),
     });
 
+    // On ajoute le rôle HEALTHCAREPROFESSIONAL
+    const rolesArray = existingUser.Roles ? existingUser.Roles.split(',') : [];
+    if (!rolesArray.includes(RolesEnum.PATIENT)) {
+      rolesArray.push(RolesEnum.PATIENT);
+      existingUser.Roles = rolesArray.join(',');
+      await existingUser.save();
+    }
+
     return res.status(201).json({
       message: 'Patient enregistré avec succès.',
       patient: newPatient,
@@ -159,7 +167,7 @@ router.post('/register/patient', async (req: any, res: any) => {
  * @route POST /register/caregiver
  * @description Enregistre un professionnel de santé (HealthcareProfessional) à partir d’un utilisateur existant.
  * 
- * @access Public
+ * @access Protégé
  * 
  * @body
  * - userId: string (requis) — Identifiant de l'utilisateur existant
@@ -191,8 +199,8 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
 
-    const existingUserId = await HealthcareProfessional.findOne({ where: { UserId: userId } });
-    if (existingUserId) {
+    const existingHealthcareProfessional = await HealthcareProfessional.findOne({ where: { UserId: userId } });
+    if (existingHealthcareProfessional) {
       return res.status(409).json({ error: 'Un utilisateur avec cet ID existe déjà' });
     }
 
@@ -205,6 +213,14 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
       UpdatedAt: new Date(),
     });
 
+    // On ajoute le rôle HEALTHCAREPROFESSIONAL
+    const rolesArray = existingUser.Roles ? existingUser.Roles.split(',') : [];
+    if (!rolesArray.includes(RolesEnum.HEALTHCAREPROFESSIONAL)) {
+      rolesArray.push(RolesEnum.HEALTHCAREPROFESSIONAL);
+      existingUser.Roles = rolesArray.join(',');
+      await existingUser.save();
+    }
+
     return res.status(201).json({
       message: 'Professionnel de soins enregistré avec succès.',
       patient: newCaregiver,
@@ -212,6 +228,7 @@ router.post('/register/caregiver', async (req: any, res: any ) => {
   } 
   catch (error) 
   {
+    console.log(error)
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });

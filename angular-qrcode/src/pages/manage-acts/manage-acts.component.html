@@ -1,0 +1,22 @@
+<h3>Mes actes de soin</h3>
+
+<div class="row">
+  <div class="col-12 col-md-6" *ngFor="let act of allActs">
+    <div
+      class="card my-2"
+      [class.border-success]="isLinked(act)"
+      [class.bg-light]="isLinked(act)"
+      (click)="toggleAct(act)"
+      style="cursor: pointer;"
+    >
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="card-title">{{ act.Name }}</h5>
+          <p class="card-text">{{ act.Description }}</p>
+          <p><strong>{{ act.Price }} €</strong></p>
+        </div>
+        <input type="checkbox" [checked]="isLinked(act)" readonly />
+      </div>
+    </div>
+  </div>
+</div>

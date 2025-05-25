@@ -202,20 +202,6 @@ describe('Healthcare Controller', () => {
             expect(res.statusCode).toBe(400);
         });
 
-        it('should return 400 healthcareActId missing', async () => {
-
-            const mockedLinkActCaregiver = {
-                healthcareActId: '1'
-            };
-
-            const res = await request(app)
-                .post('/api/healthcare/act/caregiver')
-                .set('x-userId', '123')
-                .send(mockedLinkActCaregiver);
-        
-            expect(res.statusCode).toBe(400);
-        });
-
         it('should return 404 HealthcareProfessional doesn\'t exist', async () => {
 
             const mockedLinkActCaregiver = {
