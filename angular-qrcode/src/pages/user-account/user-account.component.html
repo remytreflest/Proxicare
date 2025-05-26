@@ -25,6 +25,19 @@
         <p><strong>Adresse :</strong> {{ user.Patient?.Address }}</p>
         <p><strong>N° Sécurité Sociale :</strong> {{ user.Patient?.SocialSecurityNumber }}</p>
         <p><strong>Structure :</strong> {{ user.Patient?.Structure?.Name || 'Non assignée' }}</p>
+
+        <div *ngIf="prescriptions.length > 0" class="mt-4">
+          <h5>Prescriptions</h5>
+          <div *ngFor="let prescription of prescriptions" class="border p-2 mb-2">
+            <p><strong>Du :</strong> {{ prescription.StartDate | date }} <strong>au</strong> {{ prescription.EndDate | date }}</p>
+            <ul>
+              <li *ngFor="let act of prescription.PrescriptionHealthcareActs">
+                {{ act.HealthcareAct?.Name }} - {{ act.OccurrencesPerDay }} fois/jour
+              </li>
+            </ul>
+          </div>
+        </div>
+
       </ng-container>
 
       <ng-template #notPatient>

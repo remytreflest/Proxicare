@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserService } from '../../services/userService';
 import { environment } from '../../environment';
 import { CommonModule } from '@angular/common';
 import { User } from '../../models/user';
 import { Router } from '@angular/router';
+import { Prescription } from '../../models/prescription';
 
 @Component({
   selector: 'app-user-account',
@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class UserAccountComponent implements OnInit {
   user!: User;
   activeTab!: string;
+  prescriptions: Prescription[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -24,8 +25,18 @@ export class UserAccountComponent implements OnInit {
     this.http.get(`${environment.urls.back}/user`).subscribe({
       next: (data) => {
         this.user = data as User
+        this.loadPrescriptions();
         this.activeTab = this.getInitialActiveTab()
       }
+    });
+  }
+
+  loadPrescriptions() {
+    this.http.get(`${environment.urls.back}/prescriptions`).subscribe({
+      next: (data: any) => {
+        this.prescriptions = data;
+      },
+      error: (err) => console.error("Erreur chargement prescriptions:", err)
     });
   }
 

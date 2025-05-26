@@ -9,6 +9,7 @@ import { UserAccountComponent } from '../pages/user-account/user-account.compone
 import { RegisterPatientComponent } from '../components/register-patient/register-patient.component';
 import { ManageActsComponent } from '../pages/manage-acts/manage-acts.component';
 import { RegisterhealthcareprofessionalComponent } from '../components/register-healthcareprofessional/register-healthcareprofessional.component';
+import { CreatePrescriptionComponent } from '../pages/create-prescription/create-prescription.component';
 
 export const routes: Routes = [
   {
@@ -43,5 +44,10 @@ export const routes: Routes = [
     path: 'planning',
     component: PlanningComponent,
     canActivate: [rolesAtLeastOneGuard([RolesEnum.PATIENT, RolesEnum.HEALTHCAREPROFESSIONAL])]
+  },
+  {
+    path: 'create-prescription',
+    component: CreatePrescriptionComponent,
+    canActivate: [roleGuard(RolesEnum.STRUCTURE)]
   },
 ];

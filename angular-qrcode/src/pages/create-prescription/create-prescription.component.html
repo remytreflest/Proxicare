@@ -1,0 +1,42 @@
+<h3>Nouvelle prescription</h3>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label for="socialSecurityNumber">N° Sécurité Sociale</label>
+    <input type="text" class="form-control" formControlName="socialSecurityNumber" required>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <label for="startDate">Date de début</label>
+      <input type="date" class="form-control" formControlName="startDate">
+    </div>
+    <div class="col">
+      <label for="endDate">Date de fin</label>
+      <input type="date" class="form-control" formControlName="endDate">
+    </div>
+  </div>
+
+  <h5>Actes de soin</h5>
+  <div formArrayName="acts">
+    <div *ngFor="let act of acts.controls; let i = index" [formGroupName]="i" class="row align-items-center mb-2">
+      <div class="col">
+        <select class="form-select" formControlName="id">
+          <option [value]="null" disabled selected>-- Sélectionner un acte --</option>
+          <option *ngFor="let act of healthcareActs" [value]="act.Id">{{ act.Name }}</option>
+        </select>
+      </div>
+      <div class="col">
+        <input type="number" class="form-control" formControlName="occurrencesPerDay" min="1">
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn btn-danger" (click)="removeAct(i)">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-secondary mb-3" (click)="addAct()">Ajouter un acte</button>
+  <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+
+<p class="text-danger mt-2" *ngIf="message">{{ message }}</p>
