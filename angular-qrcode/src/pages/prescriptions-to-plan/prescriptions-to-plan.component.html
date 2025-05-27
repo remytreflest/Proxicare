@@ -1,0 +1,26 @@
+<h3>Planification des prescriptions</h3>
+
+<div *ngFor="let prescription of prescriptions" class="border rounded p-3 mb-4">
+  <h5>{{ prescription.Patient.FirstName }} {{ prescription.Patient.LastName }}</h5>
+  <p><strong>Valide du</strong> {{ prescription.StartDate | date }} <strong>au</strong> {{ prescription.EndDate | date }}</p>
+
+  <div *ngFor="let act of prescription.PrescriptionHealthcareActs" class="p-2 mb-2 border rounded" [ngClass]="getStatusColor(act.Status)">
+    <p><strong>Acte :</strong> {{ act.HealthcareAct.Name }}</p>
+    <p><strong>Fréquence quotidienne :</strong> {{ act.OccurrencesPerDay }}</p>
+    <p><strong>Status :</strong> {{ act.Status }}</p>
+
+    <form [formGroup]="formMap[act.Id]" (ngSubmit)="planAppointment(act)">
+      <div class="row">
+        <div class="col">
+          <input type="datetime-local" class="form-control" formControlName="appointmentStartDate">
+        </div>
+        <div class="col">
+          <input type="datetime-local" class="form-control" formControlName="appointmentEndDate">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-outline-primary">Planifier</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

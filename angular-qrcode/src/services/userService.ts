@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, firstValueFrom, map, Observable, of } from 'rxjs';
 import { environment } from '../environment';
 import { AuthService } from '@auth0/auth0-angular';
 import { RolesEnum } from '../resources/rolesEnum';
@@ -18,7 +18,7 @@ export class UserService {
 
   constructor(private http: HttpClient, private router: Router, private auth: AuthService) {}
 
-  getUserById(userId: string): void {
+  getUserById(): void {
     this.http.get<User>(`${environment.urls.back}/user`).subscribe({
       next: (user) => {
         console.log("Utilisateur connecté")
@@ -31,6 +31,20 @@ export class UserService {
         this.router.navigate(['/register']);
       }
     });
+  }
+
+  async refreshUser(): Promise<boolean> {
+    try {
+      const user = await firstValueFrom(this.http.get<User>(`${environment.urls.back}/user`));
+      console.log("Utilisateur refresh");
+      this.user = user;
+      console.log(this.user);
+      this.rolesLoadedSubject.next(true);
+      return true;
+    } catch (err) {
+      console.error('Refresh erreur', err);
+      return false;
+    }
   }
 
   getUser(){

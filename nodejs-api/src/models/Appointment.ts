@@ -30,7 +30,7 @@ Appointment.init({
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  HealthcareActId: {
+  PrescriptionHealthcareActId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },

@@ -10,6 +10,7 @@ import { RegisterPatientComponent } from '../components/register-patient/registe
 import { ManageActsComponent } from '../pages/manage-acts/manage-acts.component';
 import { RegisterhealthcareprofessionalComponent } from '../components/register-healthcareprofessional/register-healthcareprofessional.component';
 import { CreatePrescriptionComponent } from '../pages/create-prescription/create-prescription.component';
+import { PrescriptionsToPlanComponent } from '../pages/prescriptions-to-plan/prescriptions-to-plan.component';
 
 export const routes: Routes = [
   {
@@ -49,5 +50,10 @@ export const routes: Routes = [
     path: 'create-prescription',
     component: CreatePrescriptionComponent,
     canActivate: [roleGuard(RolesEnum.STRUCTURE)]
+  },
+  {
+    path: 'prescriptions-to-plan',
+    component: PrescriptionsToPlanComponent,
+    canActivate: [roleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
   },
 ];

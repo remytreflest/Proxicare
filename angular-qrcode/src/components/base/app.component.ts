@@ -25,8 +25,7 @@ export class AppComponent implements OnInit {
       next: (authUser) => {
         const sub = authUser?.sub;
         if (sub) {
-          const userId = sub.split('|')[1]; // Auth0 format: "auth0|123456"
-          this.userService.getUserById(userId);
+          this.userService.getUserById();
         }
       },
       error: (err) => console.error('Erreur chargement utilisateur Auth0', err)

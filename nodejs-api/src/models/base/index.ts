@@ -9,6 +9,9 @@ import { PrescriptionHealthcareAct } from '../PrescriptionHealthcareAct';
 
 // Fonction pour initialiser les associations
 export const initModels = () => {
+
+  Appointment.belongsTo(PrescriptionHealthcareAct, { foreignKey: 'PrescriptionHealthcareActId' });
+
   // Relations
   User.hasOne(Patient, { foreignKey: 'UserId' });
   User.hasOne(HealthcareProfessional, { foreignKey: 'UserId' });
@@ -29,7 +32,6 @@ export const initModels = () => {
     foreignKey: 'HealthcareProfessionalId'
   });
 
-  HealthcareAct.hasMany(Appointment, { foreignKey: 'HealthcareActId' });
   HealthcareAct.belongsToMany(HealthcareProfessional, {
     through: 'HealthcareProfessionalHealthcareAct',
     foreignKey: 'HealthcareActId',
@@ -44,10 +46,11 @@ export const initModels = () => {
     foreignKey: 'StructureId'
   });
 
-  Prescription.belongsTo(Patient, { foreignKey: 'SocialSecurityNumber' });
+  Prescription.belongsTo(Patient, { foreignKey: 'SocialSecurityNumber', targetKey: 'SocialSecurityNumber' })
   Prescription.hasMany(PrescriptionHealthcareAct, { foreignKey: 'PrescriptionId' });
   PrescriptionHealthcareAct.belongsTo(Prescription, { foreignKey: 'PrescriptionId' });
   PrescriptionHealthcareAct.belongsTo(HealthcareAct, { foreignKey: 'HealthcareActId' });
+  PrescriptionHealthcareAct.hasMany(Appointment, { foreignKey: 'PrescriptionHealthcareActId' });
 
  return {
     User,

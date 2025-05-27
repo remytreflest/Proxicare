@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environment';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/userService';
 
 @Component({
   selector: 'app-register-patient',
@@ -19,7 +20,8 @@ export class RegisterPatientComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient, 
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +43,10 @@ export class RegisterPatientComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.http.post(`${environment.urls.back}/register/patient`, this.form.value).subscribe({
-      next: () => this.router.navigate(['/account']),
+      next: () => {
+        this.userService.refreshUser();
+        this.router.navigate(['/account']);
+      },
       error: (err) => {
         console.error(err);
         this.message = 'Erreur lors de la création du patient.';

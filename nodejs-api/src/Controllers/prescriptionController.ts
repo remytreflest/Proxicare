@@ -4,6 +4,11 @@ import { PrescriptionHealthcareAct } from '@/models/PrescriptionHealthcareAct';
 import HealthcareAct from '@/models/HealthcareAct';
 import { iPrescriptionHealthcareAct } from '@/interfaces/iPrescriptionHealthcareAct';
 import Patient from '@/models/Patient';
+import { PrescriptionHealthcareactsStatus } from '@/resources/emuns/prescriptionHealthcareactsStatus';
+import { col, Op } from 'sequelize';
+import { User } from '@/models/User';
+import { Structure } from '@/models/Structure';
+import HealthcareProfessional from '@/models/HealthcareProfessional';
 
 const router = express.Router();
 
@@ -58,7 +63,8 @@ router.post('/prescriptions', async (req: any, res: any) => {
       await PrescriptionHealthcareAct.create({
         PrescriptionId: prescription.Id,
         HealthcareActId: act.id,
-        OccurrencesPerDay: act.occurrencesPerDay
+        OccurrencesPerDay: act.occurrencesPerDay,
+        Status: PrescriptionHealthcareactsStatus.TO_BE_PLANNED
       });
     }
 
@@ -69,7 +75,7 @@ router.post('/prescriptions', async (req: any, res: any) => {
   }
 });
 
-router.get('/prescriptions', async (req: any, res: any) => {
+router.get('/prescriptions/patient', async (req: any, res: any) => {
   const userId = req.userId;
 
   if (!userId) {
@@ -96,6 +102,65 @@ router.get('/prescriptions', async (req: any, res: any) => {
   } catch (error) {
     console.error('Erreur récupération prescriptions:', error);
     return res.status(500).json({ message: "Erreur serveur." });
+  }
+});
+
+router.get('/prescriptions/healthcareprofessional', async (req: any, res: any) => {
+  const userId = req.userId;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'Utilisateur non authentifié' });
+  }
+
+  try {
+    const healthcareProfessional = await HealthcareProfessional.findOne({
+      where: { UserId: userId },
+      include: [{ model: Structure }],
+    });
+
+    if (!healthcareProfessional) {
+      return res.status(404).json({ message: 'Professionnel de santé introuvable' });
+    }
+
+    const structureIds = healthcareProfessional.Structures?.map(s => s.Id);
+    if (!structureIds || structureIds.length === 0) {
+      return res.status(404).json({ message: 'Aucune structure associée au professionnel' });
+    }
+console.log(structureIds)
+    const prescriptions = await Prescription.findAll({
+      where: {
+        StartDate: { [Op.gte]: new Date() },
+      },
+      include: [
+        {
+          model: Patient,
+          as: 'Patient',
+          required: true,
+          on: {
+            '$Prescription.SocialSecurityNumber$': {
+              [Op.eq]: col('Patient.SocialSecurityNumber'),
+            },
+          },
+          where: { StructureId: { [Op.in]: structureIds } },
+          include: [
+            {
+              model: User,
+              as: 'User',
+              attributes: ['FirstName', 'LastName', 'Email'],
+            },
+          ],
+        },
+        {
+          model: PrescriptionHealthcareAct,
+          include: [HealthcareAct],
+        },
+      ],
+    });
+console.log(prescriptions)
+    return res.status(200).json(prescriptions);
+  } catch (error) {
+    console.error('Erreur récupération prescriptions :', error);
+    return res.status(500).json({ message: 'Erreur interne du serveur' });
   }
 });
 

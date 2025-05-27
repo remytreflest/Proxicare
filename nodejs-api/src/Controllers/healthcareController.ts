@@ -119,8 +119,6 @@ router.post('/healthcare/act', async (req: any, res: any) => {
       Name: name.trim(),
       Description: description?.trim() || null,
       Price: price,
-      
-      
     });
 
     return res.status(201).json({
@@ -175,6 +173,5 @@ router.get('/healthcare/acts/user', async (req: any, res: any) => {
     return res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
-
 
 export default router;

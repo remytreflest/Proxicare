@@ -39,7 +39,7 @@ export class CreatePrescriptionComponent implements OnInit {
     this.acts.push(
       this.fb.group({
         id: ['', Validators.required],
-        occurrencesPerDay: [1, [Validators.required, Validators.min(1)]],
+        occurrencesPerDay: [1, [Validators.required, Validators.min(1), Validators.max(1)]],
       })
     );
   }
@@ -59,7 +59,11 @@ export class CreatePrescriptionComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.http.post(`${environment.urls.back}/prescriptions`, this.form.value).subscribe({
-      next: () => this.router.navigate(['/account']),
+      next: () => {
+        this.message = "Ajout de la prescription fait avec succès"
+        this.form.reset();
+        this.acts.clear();
+      },
       error: (err) => {
         console.error(err);
         this.message = "Erreur lors de l'enregistrement de la prescription.";

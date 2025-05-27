@@ -32,7 +32,7 @@ export class UserAccountComponent implements OnInit {
   }
 
   loadPrescriptions() {
-    this.http.get(`${environment.urls.back}/prescriptions`).subscribe({
+    this.http.get(`${environment.urls.back}/prescriptions/patient`).subscribe({
       next: (data: any) => {
         this.prescriptions = data;
       },

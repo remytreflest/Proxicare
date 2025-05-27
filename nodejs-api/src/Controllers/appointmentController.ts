@@ -7,6 +7,8 @@ import Patient from '@/models/Patient';
 import { User } from '@/models/User';
 import { Op } from 'sequelize';
 import HealthcareProfessionalHealthcareAct from '@/models/HealthcareProfessionalHealthcareAct';
+import { PrescriptionHealthcareAct } from '@/models/PrescriptionHealthcareAct';
+import { PrescriptionHealthcareactsStatus } from '@/resources/emuns/prescriptionHealthcareactsStatus';
 
 const router = express.Router();
 
@@ -76,16 +78,17 @@ router.get('/appointments', async (req: any, res: any) => {
  */
 router.post('/appointment', async (req: any, res: any) => {
     
+  try {
+    const userId = req.userId;
+
     const {
         patientId,
-        healthcareProfessionalId,
-        healthcareActId,
-        status,
+        prescriptionHealthcareActId,
         appointmentStartDate,
         appointmentEndDate,
     } = req.body;
 
-    if (!patientId || !healthcareProfessionalId || !healthcareActId || !status || !appointmentStartDate || !appointmentEndDate) {
+    if (!patientId || !prescriptionHealthcareActId || !appointmentStartDate || !appointmentEndDate) {
         return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
@@ -94,18 +97,22 @@ router.post('/appointment', async (req: any, res: any) => {
         return res.status(404).json({ error: 'Le patient n\'a pas été trouvé' });
     }
 
-    const existinghealthcareProfessionalId = await HealthcareProfessional.findOne({ where: { Id: healthcareProfessionalId } });
+    const healthcareProfessional = await HealthcareProfessional.findOne({
+      where: { UserId: req.userId }, // ou directement userId si tu l'as en variable
+    });
+
+    if (!healthcareProfessional) {
+        return res.status(404).json({ error: 'Vous êtes pas un professionnel de santé' });
+    }
+
+    const existinghealthcareProfessionalId = await HealthcareProfessional.findOne({ where: { Id: healthcareProfessional.Id } });
     if (!existinghealthcareProfessionalId) {
         return res.status(404).json({ error: 'Le professionnel de soins n\'a pas été trouvé' });
     }
 
-    const existinghealthcareActId = await HealthcareAct.findOne({ where: { Id: healthcareProfessionalId } });
+    const existinghealthcareActId = await HealthcareAct.findOne({ where: { Id: healthcareProfessional.Id  } });
     if (!existinghealthcareActId) {
         return res.status(404).json({ error: 'L\'acte n\'a pas été trouvé' });
-    }
-
-    if (!Object.values(AppointmentsStatusEnum).includes(status)) {
-        return res.status(400).json({ message: 'Statut invalide.' });
     }
 
     const startDate = new Date(appointmentStartDate);
@@ -124,9 +131,16 @@ router.post('/appointment', async (req: any, res: any) => {
         return res.status(400).json({ message: 'Les dates doivent être dans le futur.' });
     }
 
+    const prescriptionAct = await PrescriptionHealthcareAct.findByPk(prescriptionHealthcareActId);
+    if (!prescriptionAct) {
+      return res.status(404).json({ error: 'L\'acte de prescription est introuvable.' });
+    }
+
+    const healthcareActId = prescriptionAct.HealthcareActId;
+
     const hasActLink = await HealthcareProfessionalHealthcareAct.findOne({
       where: {
-        HealthcareProfessionalId: healthcareProfessionalId,
+        HealthcareProfessionalId: healthcareProfessional.Id,
         HealthcareActId: healthcareActId,
       },
     });
@@ -137,20 +151,23 @@ router.post('/appointment', async (req: any, res: any) => {
       });
     }
 
-  try {
     const appointment = await Appointment.create({
       PatientId: patientId,
-      HealthcareProfessionalId: healthcareProfessionalId,
-      HealthcareActId: healthcareActId,
-      Status: status,
+      HealthcareProfessionalId: healthcareProfessional.Id,
+      PrescriptionHealthcareActId: prescriptionHealthcareActId,
+      Status: AppointmentsStatusEnum.PLANNED,
       AppointmentStartDate: appointmentStartDate,
       AppointmentEndDate: appointmentEndDate,
     });
+
+    prescriptionAct.Status = PrescriptionHealthcareactsStatus.PLANNED;
+    await prescriptionAct.save();
 
     res.status(201).json(appointment);
   } 
   catch (error) 
   {
+    console.log(error)
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
