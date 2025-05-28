@@ -8,8 +8,9 @@
     <p><strong>Acte :</strong> {{ act.HealthcareAct.Name }}</p>
     <p><strong>Fréquence quotidienne :</strong> {{ act.OccurrencesPerDay }}</p>
     <p><strong>Status :</strong> {{ act.Status }}</p>
+    <p *ngIf="act.Status != PrescriptionHealthcareactsStatus.TO_BE_PLANNED"><strong>Plage horaire : </strong>{{ act.Appointments[0].AppointmentStartDate | date: 'dd/MM/yyyy HH:mm' }} - {{ act.Appointments[0].AppointmentEndDate | date: 'dd/MM/yyyy HH:mm' }}</p>
 
-    <form [formGroup]="formMap[act.Id]" (ngSubmit)="planAppointment(act)">
+    <form *ngIf="act.Status == PrescriptionHealthcareactsStatus.TO_BE_PLANNED" [formGroup]="formMap[act.Id]" (ngSubmit)="planAppointment(act)">
       <div class="row">
         <div class="col">
           <input type="datetime-local" class="form-control" formControlName="appointmentStartDate">

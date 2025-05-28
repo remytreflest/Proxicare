@@ -27,7 +27,7 @@
         </select>
       </div>
       <div class="col">
-        <input type="number" class="form-control" formControlName="occurrencesPerDay" min="1">
+        <input type="number" class="form-control" formControlName="occurrencesPerDay" min="1" [disabled]=true>
       </div>
       <div class="col-auto">
         <button type="button" class="btn btn-danger" (click)="removeAct(i)">Supprimer</button>
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-secondary mb-3" (click)="addAct()">Ajouter un acte</button>
+  <button type="button" class="btn btn-secondary" (click)="addAct()">Ajouter un acte</button>
   <button type="submit" class="btn btn-primary">Enregistrer</button>
 </form>
 

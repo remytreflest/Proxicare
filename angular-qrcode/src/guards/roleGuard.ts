@@ -31,3 +31,10 @@ export const rolesAtLeastOneGuard = (requiredRoles: RolesEnum[]): CanActivateFn 
   })
   return hasRoles;
 };
+
+export const notIfRoleGuard = (requiredRole: RolesEnum): CanActivateFn => () => {
+  const userService = inject(UserService);
+  console.log(requiredRole)
+  console.log(!userService.hasRole(requiredRole))
+  return !userService.hasRole(requiredRole);
+};

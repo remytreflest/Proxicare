@@ -3,7 +3,7 @@ import { AppComponent } from '../components/base/app.component';
 import { DashboardComponent } from '../pages/dashboard/dashboard.component';
 import { PlanningComponent } from '../pages/planning/planning.component';
 import { RegisterComponent } from '../pages/register/register.component';
-import { roleGuard, rolesAtLeastOneGuard, rolesGuard } from '../guards/roleGuard';
+import { notIfRoleGuard, roleGuard, rolesAtLeastOneGuard, rolesGuard } from '../guards/roleGuard';
 import { RolesEnum } from '../resources/rolesEnum';
 import { UserAccountComponent } from '../pages/user-account/user-account.component';
 import { RegisterPatientComponent } from '../components/register-patient/register-patient.component';
@@ -11,6 +11,7 @@ import { ManageActsComponent } from '../pages/manage-acts/manage-acts.component'
 import { RegisterhealthcareprofessionalComponent } from '../components/register-healthcareprofessional/register-healthcareprofessional.component';
 import { CreatePrescriptionComponent } from '../pages/create-prescription/create-prescription.component';
 import { PrescriptionsToPlanComponent } from '../pages/prescriptions-to-plan/prescriptions-to-plan.component';
+import { RolesLoadedGuard } from '../guards/rolesLoadedGuard';
 
 export const routes: Routes = [
   {
@@ -19,41 +20,48 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [RolesLoadedGuard, notIfRoleGuard(RolesEnum.USER)]
   },
   {
     path: 'register/healthcareprofessional',
-    component: RegisterhealthcareprofessionalComponent
+    component: RegisterhealthcareprofessionalComponent,
+    canActivate: [RolesLoadedGuard, notIfRoleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
   },
   {
     path: 'register/patient',
-    component: RegisterPatientComponent
+    component: RegisterPatientComponent,
+    canActivate: [RolesLoadedGuard, notIfRoleGuard(RolesEnum.PATIENT)]
   },
   {
     path: 'manage-acts',
-    component: ManageActsComponent
+    component: ManageActsComponent,
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.ADMIN)]
   },
   {
     path: 'account',
-    component: UserAccountComponent
+    component: UserAccountComponent,
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.USER)]
   },
   {
     path: 'planning',
     component: PlanningComponent,
-    canActivate: [rolesAtLeastOneGuard([RolesEnum.PATIENT, RolesEnum.HEALTHCAREPROFESSIONAL])]
+    canActivate: [RolesLoadedGuard, rolesAtLeastOneGuard([RolesEnum.PATIENT, RolesEnum.HEALTHCAREPROFESSIONAL])]
   },
   {
     path: 'create-prescription',
     component: CreatePrescriptionComponent,
-    canActivate: [roleGuard(RolesEnum.STRUCTURE)]
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.STRUCTURE)]
   },
   {
     path: 'prescriptions-to-plan',
     component: PrescriptionsToPlanComponent,
-    canActivate: [roleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
   },
+  { path: '**', redirectTo: '' }
 ];

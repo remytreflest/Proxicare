@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { environment } from '../../environment';
 import { CommonModule, DatePipe, NgClass } from '@angular/common';
+import { PrescriptionHealthcareactsStatus } from '../../resources/prescriptionHealthcareactsStatus';
 
 @Component({
   selector: 'app-prescriptions-to-plan',
@@ -16,6 +17,8 @@ import { CommonModule, DatePipe, NgClass } from '@angular/common';
   providers: [DatePipe],
 })
 export class PrescriptionsToPlanComponent implements OnInit {
+
+  PrescriptionHealthcareactsStatus = PrescriptionHealthcareactsStatus;
   prescriptions: any[] = [];
   formMap: { [id: number]: FormGroup } = {};
 
@@ -61,6 +64,7 @@ export class PrescriptionsToPlanComponent implements OnInit {
   }
 
   planAppointment(act: any): void {
+    
     const form = this.formMap[act.Id];
     if (form.invalid) return;
 

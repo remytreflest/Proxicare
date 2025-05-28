@@ -46,6 +46,27 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       CreatedAt: new Date(),
       UpdatedAt: new Date(),
     },
+    {
+      Name: 'Prise de traitement (Matin)',
+      Description: 'Administration de traitement oral sous forme de comprimé(s)',
+      Price: 22.0,
+      CreatedAt: new Date(),
+      UpdatedAt: new Date(),
+    },
+    {
+      Name: 'Prise de traitement (Midi)',
+      Description: 'Administration de traitement oral sous forme de comprimé(s)',
+      Price: 22.0,
+      CreatedAt: new Date(),
+      UpdatedAt: new Date(),
+    },
+    {
+      Name: 'Prise de traitement (Soir)',
+      Description: 'Administration de traitement oral sous forme de comprimé(s)',
+      Price: 22.0,
+      CreatedAt: new Date(),
+      UpdatedAt: new Date(),
+    },
   ]);
 }
 

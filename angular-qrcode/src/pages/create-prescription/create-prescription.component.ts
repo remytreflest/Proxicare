@@ -39,7 +39,7 @@ export class CreatePrescriptionComponent implements OnInit {
     this.acts.push(
       this.fb.group({
         id: ['', Validators.required],
-        occurrencesPerDay: [1, [Validators.required, Validators.min(1), Validators.max(1)]],
+        occurrencesPerDay: [{ value: 1, disabled: true }, [Validators.required, Validators.min(1), Validators.max(1)]],
       })
     );
   }
@@ -65,8 +65,7 @@ export class CreatePrescriptionComponent implements OnInit {
         this.acts.clear();
       },
       error: (err) => {
-        console.error(err);
-        this.message = "Erreur lors de l'enregistrement de la prescription.";
+        this.message = err.error.message;
       },
     });
   }

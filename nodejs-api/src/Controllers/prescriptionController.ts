@@ -9,6 +9,7 @@ import { col, Op } from 'sequelize';
 import { User } from '@/models/User';
 import { Structure } from '@/models/Structure';
 import HealthcareProfessional from '@/models/HealthcareProfessional';
+import Appointment from '@/models/Appointment';
 
 const router = express.Router();
 
@@ -126,7 +127,7 @@ router.get('/prescriptions/healthcareprofessional', async (req: any, res: any) =
     if (!structureIds || structureIds.length === 0) {
       return res.status(404).json({ message: 'Aucune structure associée au professionnel' });
     }
-console.log(structureIds)
+
     const prescriptions = await Prescription.findAll({
       where: {
         StartDate: { [Op.gte]: new Date() },
@@ -152,11 +153,17 @@ console.log(structureIds)
         },
         {
           model: PrescriptionHealthcareAct,
-          include: [HealthcareAct],
+          include: [
+            HealthcareAct,
+            {
+              model: Appointment, // ✅ on ajoute l'Appointment ici
+              as: 'Appointments',
+            },
+          ],
         },
       ],
     });
-console.log(prescriptions)
+
     return res.status(200).json(prescriptions);
   } catch (error) {
     console.error('Erreur récupération prescriptions :', error);
