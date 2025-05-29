@@ -16,11 +16,8 @@ const router = express.Router();
  * @access Protégé
  */
 router.get('/user', async (req: any, res: any) => {
+  
   const userId = req.userId;
-
-  if (!userId) {
-    return res.status(400).json({ message: "ID utilisateur requis." });
-  }
 
   try {
     let user = await User.findByPk(userId, {
@@ -165,6 +162,7 @@ router.post('/register/patient', async (req: any, res: any) => {
   } 
   catch (error) 
   {
+    console.log(error)
     return res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });

@@ -9,9 +9,6 @@ dotenv.config();
 
 const app = express();
 const AUTH_TOKEN_CHECK = checkJwt;
-const unprotectedPath = [
-  { url: '/api/qrcode/healthcareprofessional', methods: ['GET'] }
-];
   
 app.use(express.json());
 
@@ -33,14 +30,10 @@ app.use(cors({
 }));
   
 // SECURITE : Permet l'accès à l'API uniquement si un token personnalisé x-userid est présent
-app.use(extractUserId.unless({
-    path: unprotectedPath
-  }));
+app.use(extractUserId);
 // SECURITE : Permet l'accès à l'API uniquement si un token d'authentification est présent
 // Exception faite des routes déclarées dans le unless
-app.use(AUTH_TOKEN_CHECK.unless({
-    path: unprotectedPath
-  }));
+app.use(AUTH_TOKEN_CHECK);
 // Ajoute les différentes routes de l'api
 app.use('/api', routes);
 

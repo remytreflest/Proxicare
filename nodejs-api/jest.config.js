@@ -14,6 +14,7 @@ module.exports = {
     '^./middlewares/expressjwt.config$': '<rootDir>/__mocks__/expressjwt.config.ts'
   },
   testPathIgnorePatterns: [
+    '<rootDir>/src/app.test.ts',
     "/node_modules/",
     "/dist/"
   ],

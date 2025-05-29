@@ -92,6 +92,22 @@ router.post('/appointment', async (req: any, res: any) => {
         return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
 
+    const startDate = new Date(appointmentStartDate);
+    const endDate = new Date(appointmentEndDate);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        return res.status(400).json({ message: 'Les dates ne sont pas valides.' });
+    }
+
+    if (startDate >= endDate) {
+        return res.status(400).json({ message: 'La date de début doit être antérieure à la date de fin.' });
+    }
+
+    const now = new Date();
+    if (startDate <= now || endDate <= now) {
+        return res.status(400).json({ message: 'Les dates doivent être dans le futur.' });
+    }
+
     const existingPatientId = await Patient.findOne({ where: { Id: patientId } });
     if (!existingPatientId) {
         return res.status(404).json({ error: 'Le patient n\'a pas été trouvé' });
@@ -113,22 +129,6 @@ router.post('/appointment', async (req: any, res: any) => {
     const existinghealthcareActId = await HealthcareAct.findOne({ where: { Id: healthcareProfessional.Id  } });
     if (!existinghealthcareActId) {
         return res.status(404).json({ error: 'L\'acte n\'a pas été trouvé' });
-    }
-
-    const startDate = new Date(appointmentStartDate);
-    const endDate = new Date(appointmentEndDate);
-
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-        return res.status(400).json({ message: 'Les dates ne sont pas valides.' });
-    }
-
-    if (startDate >= endDate) {
-        return res.status(400).json({ message: 'La date de début doit être antérieure à la date de fin.' });
-    }
-
-    const now = new Date();
-    if (startDate <= now || endDate <= now) {
-        return res.status(400).json({ message: 'Les dates doivent être dans le futur.' });
     }
 
     const prescriptionAct = await PrescriptionHealthcareAct.findByPk(prescriptionHealthcareActId);

@@ -1,258 +1,218 @@
-import app from '@/app';
+
 import request from 'supertest';
-import HealthcareAct from "@/models/HealthcareAct";
-import HealthcareProfessionalHealthcareAct from '@/models/HealthcareProfessionalHealthcareAct';
+import app from '@/app.test';
 import HealthcareProfessional from '@/models/HealthcareProfessional';
+import HealthcareAct from '@/models/HealthcareAct';
+import HealthcareProfessionalHealthcareAct from '@/models/HealthcareProfessionalHealthcareAct';
 
-
+jest.mock('@/models/HealthcareProfessional');
 jest.mock('@/models/HealthcareAct');
 jest.mock('@/models/HealthcareProfessionalHealthcareAct');
-jest.mock('@/models/HealthcareProfessional');
 
 describe('Healthcare Controller', () => {
 
-    const mockData = [
-        {
-            id: '1',
-            name: 'un nom',
-            description: '', 
-            price: 1,
-            createdAt: ''
-        },
-        {
-            id: '2',
-            name: 'un nom',
-            description: '', 
-            price: 1,
-            createdAt: ''
-        }
-    ];
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-    describe('GET /healthcare/acts', () => {
+  describe('POST /healthcare/act/healthcareprofessional', () => {
+    it('should return 201 when association is successful', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({ Id: 1 });
+      (HealthcareAct.findOne as jest.Mock).mockResolvedValue({ Id: 2 });
+      (HealthcareProfessionalHealthcareAct.create as jest.Mock).mockResolvedValue({});
 
-        beforeEach(() => {
-            jest.clearAllMocks();
-        });
+      const res = await request(app)
+        .post('/api/healthcare/act/healthcareprofessional')
+        .send({ healthcareActId: 2 })
+        .set('userId', 'test-user-id');
 
-        it('should return 200 with some act', async () => {
-        
-            (HealthcareAct.findAll as jest.Mock).mockResolvedValue(mockData);
-        
-            const res = await request(app)
-                .get('/api/healthcare/acts')
-                .set('x-userId', '123');
-        
-            expect(res.statusCode).toBe(200);
-        });
-
-        it('should return 500', async () => {
-        
-            (HealthcareAct.findAll as jest.Mock).mockRejectedValue(new Error('DB uncatchable')); 
-        
-            const res = await request(app)
-                .get('/api/healthcare/acts')
-                .set('x-userId', '123');
-        
-            expect(res.statusCode).toBe(500);
-        });
-
+      expect(res.statusCode).toBe(201);
     });
 
-    describe('POST /healthcare/act', () => {
+    it('should return 400 if required fields are missing', async () => {
+      const res = await request(app)
+        .post('/api/healthcare/act/healthcareprofessional')
+        .send({});
 
-        beforeEach(() => {
-            jest.clearAllMocks();
-        });
-
-        it('should return 201', async () => {
-
-            const mockedAct = {
-                id: '1',
-                name: 'un nom',
-                description: '', 
-                price: 1,
-                createdAt: ''
-            };
-        
-            (HealthcareAct.findOne as jest.Mock).mockResolvedValue(null);
-            (HealthcareAct.create as jest.Mock).mockResolvedValue(mockedAct);
-
-            const res = await request(app)
-                .post('/api/healthcare/act')
-                .set('x-userId', '123')
-                .send(mockedAct);
-        
-            expect(res.statusCode).toBe(201);
-        });
-
-        it('should return 400 name null', async () => {
-
-            const mockedAct = {
-                id: '1',
-                name: null,
-                description: '', 
-                price: 1,
-                createdAt: ''
-            };
-
-            const res = await request(app)
-                .post('/api/healthcare/act')
-                .set('x-userId', '123')
-                .send(mockedAct);
-        
-            expect(res.statusCode).toBe(400);
-        });
-
-        it('should return 400 name empty', async () => {
-
-            const mockedAct = {
-                id: '1',
-                name: '',
-                description: '', 
-                price: 1,
-                createdAt: ''
-            };
-
-            const res = await request(app)
-                .post('/api/healthcare/act')
-                .set('x-userId', '123')
-                .send(mockedAct);
-        
-            expect(res.statusCode).toBe(400);
-        });
-
-        it('should return 409', async () => {
-
-            const mockedAct = {
-                id: '1',
-                name: 'un nom',
-                description: '', 
-                price: 1,
-                createdAt: ''
-            };
-        
-            (HealthcareAct.findOne as jest.Mock).mockResolvedValue({});
-
-            const res = await request(app)
-                .post('/api/healthcare/act')
-                .set('x-userId', '123')
-                .send(mockedAct);
-        
-            expect(res.statusCode).toBe(409);
-        });
-
-        it('should return 500', async () => {
-
-            const mockedAct = {
-                id: '1',
-                name: 'un nom',
-                description: '', 
-                price: 1,
-                createdAt: ''
-            };
-        
-            (HealthcareAct.findOne as jest.Mock).mockRejectedValue(new Error('DB uncatchable')); 
-
-            const res = await request(app)
-                .post('/api/healthcare/act')
-                .set('x-userId', '123')
-                .send(mockedAct);
-        
-            expect(res.statusCode).toBe(500);
-        });
-
+      expect(res.statusCode).toBe(400);
     });
 
-    describe('POST /healthcare/act/healthcareprofessional', () => {
+    it('should return 404 if healthcare professional not found', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
 
-        beforeEach(() => {
-            jest.clearAllMocks();
-        });
+      const res = await request(app)
+        .post('/api/healthcare/act/healthcareprofessional')
+        .send({ healthcareActId: 2 })
+        .set('userId', 'test-user-id');
 
-        it('should return 201', async () => {
-
-            const mockedLinkActhealthcareprofessional = {
-                healthcareProfessionalId: '1',
-                healthcareActId: '2'
-            };
-        
-            (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({});
-            (HealthcareAct.findOne as jest.Mock).mockResolvedValue({});
-            (HealthcareProfessionalHealthcareAct.create as jest.Mock).mockResolvedValue(mockedLinkActhealthcareprofessional);
-
-            const res = await request(app)
-                .post('/api/healthcare/act/healthcareprofessional')
-                .set('x-userId', '123')
-                .send(mockedLinkActhealthcareprofessional);
-        
-            expect(res.statusCode).toBe(201);
-        });
-
-        it('should return 400 healthcareProfessionalId missing', async () => {
-
-            const mockedLinkActhealthcareprofessional = {
-                healthcareProfessionalId: '1'
-            };
-
-            const res = await request(app)
-                .post('/api/healthcare/act/healthcareprofessional')
-                .set('x-userId', '123')
-                .send(mockedLinkActhealthcareprofessional);
-        
-            expect(res.statusCode).toBe(400);
-        });
-
-        it('should return 404 HealthcareProfessional doesn\'t exist', async () => {
-
-            const mockedLinkActhealthcareprofessional = {
-                healthcareProfessionalId: '1',
-                healthcareActId: '2'
-            };
-        
-            (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
-
-            const res = await request(app)
-                .post('/api/healthcare/act/healthcareprofessional')
-                .set('x-userId', '123')
-                .send(mockedLinkActhealthcareprofessional);
-        
-            expect(res.statusCode).toBe(404);
-        });
-
-        it('should return 404 HealthcareAct doesn\'t exist', async () => {
-
-            const mockedLinkActhealthcareprofessional = {
-                healthcareProfessionalId: '1',
-                healthcareActId: '2'
-            };
-        
-            (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({});
-            (HealthcareAct.findOne as jest.Mock).mockResolvedValue(null);
-
-            const res = await request(app)
-                .post('/api/healthcare/act/healthcareprofessional')
-                .set('x-userId', '123')
-                .send(mockedLinkActhealthcareprofessional);
-        
-            expect(res.statusCode).toBe(404);
-        });
-
-        it('should return 500', async () => {
-
-            const mockedLinkActhealthcareprofessional = {
-                healthcareProfessionalId: '1',
-                healthcareActId: '2'
-            };
-        
-            (HealthcareProfessional.findOne as jest.Mock).mockRejectedValue(new Error('DB uncatchable'));
-
-            const res = await request(app)
-                .post('/api/healthcare/act/healthcareprofessional')
-                .set('x-userId', '123')
-                .send(mockedLinkActhealthcareprofessional);
-        
-            expect(res.statusCode).toBe(500);
-        });
-
+      expect(res.statusCode).toBe(404);
     });
+
+    it('should return 404 if act not found', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({ Id: 1 });
+      (HealthcareAct.findOne as jest.Mock).mockResolvedValue(null);
+
+      const res = await request(app)
+        .post('/api/healthcare/act/healthcareprofessional')
+        .send({ healthcareActId: 999 })
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(404);
+    });
+
+    it('should return 500 if server error occurs', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockRejectedValue(new Error());
+
+      const res = await request(app)
+        .post('/api/healthcare/act/healthcareprofessional')
+        .send({ healthcareActId: 2 })
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(500);
+    });
+  });
+
+  describe('DELETE /healthcare/act/healthcareprofessional/:actId', () => {
+    it('should return 200 if deletion is successful', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({ Id: 1 });
+      (HealthcareProfessionalHealthcareAct.destroy as jest.Mock).mockResolvedValue(1);
+
+      const res = await request(app)
+        .delete('/api/healthcare/act/healthcareprofessional/2')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    it('should return 400 if actId is invalid', async () => {
+      const res = await request(app)
+        .delete('/api/healthcare/act/healthcareprofessional/invalid')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    it('should return 404 if healthcare professional not found', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
+
+      const res = await request(app)
+        .delete('/api/healthcare/act/healthcareprofessional/2')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(404);
+    });
+
+    it('should return 404 if nothing was deleted', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({ Id: 1 });
+      (HealthcareProfessionalHealthcareAct.destroy as jest.Mock).mockResolvedValue(0);
+
+      const res = await request(app)
+        .delete('/api/healthcare/act/healthcareprofessional/2')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(404);
+    });
+
+    it('should return 500 if an error occurs', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockRejectedValue(new Error());
+
+      const res = await request(app)
+        .delete('/api/healthcare/act/healthcareprofessional/2')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(500);
+    });
+  });
+
+  describe('POST /healthcare/act', () => {
+    it('should return 201 if act is created', async () => {
+      (HealthcareAct.findOne as jest.Mock).mockResolvedValue(null);
+      (HealthcareAct.create as jest.Mock).mockResolvedValue({ Name: 'Test', Price: 10 });
+
+      const res = await request(app)
+        .post('/api/healthcare/act')
+        .send({ name: 'Test', price: 10, description: 'Description' });
+
+      expect(res.statusCode).toBe(201);
+    });
+
+    it('should return 400 for missing name or invalid name', async () => {
+      const res = await request(app).post('/api/healthcare/act').send({ price: 10 });
+      expect(res.statusCode).toBe(400);
+    });
+
+    it('should return 400 for invalid price', async () => {
+      const res = await request(app).post('/api/healthcare/act').send({ name: 'Test', price: -5 });
+      expect(res.statusCode).toBe(400);
+    });
+
+    it('should return 409 if act already exists', async () => {
+      (HealthcareAct.findOne as jest.Mock).mockResolvedValue({});
+
+      const res = await request(app)
+        .post('/api/healthcare/act')
+        .send({ name: 'Test', price: 10 });
+
+      expect(res.statusCode).toBe(409);
+    });
+
+    it('should return 500 on error', async () => {
+      (HealthcareAct.findOne as jest.Mock).mockRejectedValue(new Error());
+
+      const res = await request(app)
+        .post('/api/healthcare/act')
+        .send({ name: 'Test', price: 10 });
+
+      expect(res.statusCode).toBe(500);
+    });
+  });
+
+  describe('GET /healthcare/acts', () => {
+    it('should return 200 with all acts', async () => {
+      (HealthcareAct.findAll as jest.Mock).mockResolvedValue([]);
+
+      const res = await request(app).get('/api/healthcare/acts');
+      expect(res.statusCode).toBe(200);
+    });
+
+    it('should return 500 on error', async () => {
+      (HealthcareAct.findAll as jest.Mock).mockRejectedValue(new Error());
+
+      const res = await request(app).get('/api/healthcare/acts');
+      expect(res.statusCode).toBe(500);
+    });
+  });
+
+  describe('GET /healthcare/acts/user', () => {
+    it('should return 200 with associated acts', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue({ HealthcareActs: [] });
+
+      const res = await request(app)
+        .get('/api/healthcare/acts/user')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    it('should return 404 if professional not found', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockResolvedValue(null);
+
+      const res = await request(app)
+        .get('/api/healthcare/acts/user')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(404);
+    });
+
+    it('should return 500 on error', async () => {
+      (HealthcareProfessional.findOne as jest.Mock).mockRejectedValue(new Error());
+
+      const res = await request(app)
+        .get('/api/healthcare/acts/user')
+        .set('userId', 'test-user-id');
+
+      expect(res.statusCode).toBe(500);
+    });
+  });
+
 });

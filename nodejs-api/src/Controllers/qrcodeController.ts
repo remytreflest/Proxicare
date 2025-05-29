@@ -35,15 +35,15 @@ router.get('/qrcode/patient/:prescriptionHealthcareActId', async (req: any, res:
     if (!prescriptionAct) return res.status(404).json({ message: 'Acte de prescription introuvable.' });
 
     if (prescriptionAct.Status === PrescriptionHealthcareactsStatus.PERFORMED) {
-      return res.status(200).json({ message: 'Ce soin a déjà été validé.' });
+      return res.status(400).json({ message: 'Ce soin a déjà été validé.' });
     }
 
     if (prescriptionAct.Status === PrescriptionHealthcareactsStatus.TO_BE_PLANNED) {
-      return res.status(200).json({ message: 'Ce soin n\'est pas encore prévu.' });
+      return res.status(400).json({ message: 'Ce soin n\'est pas encore prévu.' });
     }
 
     if (prescriptionAct.Status === PrescriptionHealthcareactsStatus.CANCELLED) {
-      return res.status(200).json({ message: 'Ce soin a été annulé.' });
+      return res.status(400).json({ message: 'Ce soin a été annulé.' });
     }
 
     // Vérifie que l'utilisateur connecté est bien le patient concerné
