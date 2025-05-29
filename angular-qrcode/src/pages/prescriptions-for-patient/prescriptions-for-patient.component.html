@@ -1,0 +1,39 @@
+<div class="container py-4">
+  <h2 class="mb-4">🩺 Mes prescriptions</h2>
+
+  <div *ngIf="prescriptions.length === 0">
+    <p class="text-muted">Aucune prescription disponible.</p>
+  </div>
+
+  <div *ngFor="let prescription of prescriptions" class="prescription-card mb-4 shadow-sm">
+    <h5 class="mb-3 text-primary">
+      <i class="fas fa-calendar-alt me-2"></i>
+      Prescription du {{ prescription.StartDate | date }} au {{ prescription.EndDate | date }}
+    </h5>
+
+    <div *ngFor="let act of prescription.PrescriptionHealthcareActs"
+         class="act-card my-2 p-3 border position-relative"
+         [class.act-clickable]="act.Status === Status.PLANNED"
+         [class.card-disabled]="act.Status !== Status.PLANNED"
+         (click)="goToValidation(act.Id, act.Status)">
+
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h6 class="mb-1">
+            <i class="fas fa-stethoscope me-2 text-secondary"></i>
+            {{ act.HealthcareAct?.Name }}
+          </h6>
+          <p class="mb-1 text-muted">{{ act.HealthcareAct?.Description }}</p>
+          <p class="mb-1"><i class="fas fa-sync-alt me-1"></i> {{ act.OccurrencesPerDay }} fois / jour</p>
+          <p class="mb-0 text-muted"><i class="fas fa-euro-sign me-1"></i> {{ act.HealthcareAct?.Price }} €</p>
+        </div>
+        <span class="badge" [ngClass]="getStatusClass(act.Status)">
+          {{ act.Status }}
+        </span>
+      </div>
+
+      <i *ngIf="act.Status === Status.PLANNED"
+         class="fas fa-arrow-right-circle position-absolute end-0 bottom-0 me-3 mb-3 text-primary fs-4"></i>
+    </div>
+  </div>
+</div>

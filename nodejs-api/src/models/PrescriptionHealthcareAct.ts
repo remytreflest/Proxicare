@@ -1,6 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '@/config/database';
 import { PrescriptionHealthcareactsStatus } from '@/resources/emuns/prescriptionHealthcareactsStatus';
+import { Prescription } from './Prescription';
+import Appointment from './Appointment';
+import HealthcareAct from './HealthcareAct';
 
 export class PrescriptionHealthcareAct extends Model {
   public Id!: number;
@@ -8,6 +11,12 @@ export class PrescriptionHealthcareAct extends Model {
   public HealthcareActId!: number;
   public OccurrencesPerDay!: number;
   public Status!: PrescriptionHealthcareactsStatus;
+  public validateToken!: string | null;
+  public validateTokenLimitTime!: Date | null;
+
+  public Prescription?: Prescription;
+  public Appointments?: Appointment[];
+  public HealthcareAct?: HealthcareAct;
 }
 
 PrescriptionHealthcareAct.init({
@@ -31,7 +40,17 @@ PrescriptionHealthcareAct.init({
   Status: {
     type: DataTypes.STRING(50),
     allowNull: false,
-  }
+  },
+  validateToken: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    defaultValue: null,
+  },
+  validateTokenLimitTime: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    defaultValue: null,
+  },
 }, {
   sequelize,
   modelName: 'PrescriptionHealthcareAct',

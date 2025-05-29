@@ -1,11 +1,14 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '@/config/database';
+import Patient from './Patient';
 
 export class Prescription extends Model {
   public Id!: number;
   public SocialSecurityNumber!: string;
   public StartDate!: Date;
   public EndDate!: Date;
+
+  public Patient?: Patient;
 }
 
 Prescription.init({

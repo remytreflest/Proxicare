@@ -1,0 +1,45 @@
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.prescription-card {
+  border-left: 4px solid #0d6efd;
+  background: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.act-card {
+  border-radius: 0.5rem;
+  background-color: #fdfdfd;
+  border-left: 5px solid #6c757d;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &.act-clickable:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: scale(1.01);
+    cursor: pointer;
+    border-left-color: #0d6efd;
+  }
+
+  &.card-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    border-left-color: #ccc;
+  }
+}
+
+.badge {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.fas.fa-arrow-right-circle {
+  pointer-events: none;
+}

@@ -1,0 +1,20 @@
+<div class="container text-center py-4">
+
+  <h2>Validation du soin</h2>
+
+  <div *ngIf="qrCodeDataUrl">
+    <p>Scannez ce QR code pour valider votre soin :</p>
+    <img [src]="qrCodeDataUrl" alt="QR Code" class="qr-img">
+    <p class="text-muted mt-2">Renouvellement toutes les 15 secondes</p>
+  </div>
+
+  <div *ngIf="statusType === 'success'" class="alert alert-success mt-4">
+    <h5>{{ statusMessage }}</h5>
+  </div>
+
+  <div *ngIf="statusType === 'error'" class="alert alert-danger mt-4">
+    <h5>Erreur</h5>
+    <p>{{ statusMessage }}</p>
+  </div>
+
+</div>

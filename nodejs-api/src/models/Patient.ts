@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '@/config/database';
+import { User } from './User';
 
 class Patient extends Model {
   public Id!: number;
@@ -8,6 +9,9 @@ class Patient extends Model {
   public Gender!: string;
   public Address!: string;
   public SocialSecurityNumber!: string;
+  public StructureId!: number;
+
+  public User?: User;
 }
 
 Patient.init({

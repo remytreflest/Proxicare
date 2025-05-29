@@ -1,68 +1,154 @@
-/*
-    PROVISOIRE ET INUTILISABLE (MOCK DONNEES)
-*/
-
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import QRCode from 'qrcode';
 import { v4 as uuidv4 } from 'uuid';
+import { Prescription } from '@/models/Prescription';
+import { PrescriptionHealthcareAct } from '@/models/PrescriptionHealthcareAct';
+import HealthcareAct from '@/models/HealthcareAct';
+import Patient from '@/models/Patient';
+import { User } from '@/models/User';
+import { PrescriptionHealthcareactsStatus } from '@/resources/emuns/prescriptionHealthcareactsStatus';
+import HealthcareProfessional from '@/models/HealthcareProfessional';
+import Appointment from '@/models/Appointment';
 
 const router = Router();
 
-router.get('/qrcode', async (req, res) => {
-    try {
-        // Générer deux GUID aléatoires
-        const data = {
-            id1: uuidv4(),
-            id2: uuidv4()
-        };
+// Route 1 - Génération du QR Code
+router.get('/qrcode/patient/:prescriptionHealthcareActId', async (req: any, res: any) => {
+  try {
+    const { prescriptionHealthcareActId } = req.params;
+    const userId = req.userId; // supposé injecté par un middleware d'auth
 
-        // Convertir l'objet en QR code
-        // const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(data));
+    // Récupération complète du soin avec prescription + patient + rdv
+    const prescriptionAct = await PrescriptionHealthcareAct.findByPk(prescriptionHealthcareActId, {
+      include: [
+        {
+          model: Prescription,
+          include: [{ model: Patient, include: [User] }],
+        },
+        {
+          model: Appointment,
+          required: false,
+        }
+      ],
+    });
 
-        // res.send(`<img src="${qrCodeDataUrl}" />`);
+    if (!prescriptionAct) return res.status(404).json({ message: 'Acte de prescription introuvable.' });
 
-        // Construire l'URL de redirection (remplace localhost par ton domaine en prod)
-        const url = `http://localhost:5000/api/qrcode/${data.id1}`;
-
-        // Générer le QR Code contenant cette URL
-        const qrCodeDataUrl = await QRCode.toDataURL(url);
-
-        res.send(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Scan the QR Code</title>
-                <style>
-                    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-                    img { width: 300px; height: 300px; margin-top: 20px; }
-                    p { font-size: 18px; color: #333; }
-                </style>
-            </head>
-            <body>
-                <h1>Scan the QR Code</h1>
-                <p>Once scanned, you will be redirected automatically.</p>
-                <img src="${qrCodeDataUrl}" alt="QR Code" />
-            </body>
-            </html>
-        `);
-    } catch (error) {
-        console.error('Erreur lors de la génération du QR Code:', error);
-        res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (prescriptionAct.Status === PrescriptionHealthcareactsStatus.PERFORMED) {
+      return res.status(200).json({ message: 'Ce soin a déjà été validé.' });
     }
+
+    if (prescriptionAct.Status === PrescriptionHealthcareactsStatus.TO_BE_PLANNED) {
+      return res.status(200).json({ message: 'Ce soin n\'est pas encore prévu.' });
+    }
+
+    if (prescriptionAct.Status === PrescriptionHealthcareactsStatus.CANCELLED) {
+      return res.status(200).json({ message: 'Ce soin a été annulé.' });
+    }
+
+    // Vérifie que l'utilisateur connecté est bien le patient concerné
+    const patient = prescriptionAct.Prescription?.Patient;
+    if (!patient || patient.UserId !== userId) {
+      return res.status(403).json({ message: 'Accès interdit. Ce soin ne vous appartient pas.' });
+    }
+
+    // Vérifie qu'il existe au moins un rendez-vous
+    const validAppointments = prescriptionAct.Appointments?.filter(appointment => {
+      return appointment.AppointmentEndDate >= new Date();
+    });
+
+    if (!validAppointments || validAppointments.length === 0) {
+      return res.status(400).json({ message: 'Aucun rendez-vous actif pour ce soin.' });
+    }
+
+    // Génère token + limite de validité
+    const token = uuidv4();
+    const limit = new Date(Date.now() + 15 * 1000); // 15s
+
+    await prescriptionAct.update({
+      validateToken: token,
+      validateTokenLimitTime: limit,
+    });
+
+    const host = process.env.SITE_ACCESS_BY_WIFI ? process.env.FRONT_URL_LOCAL : process.env.FRONT_URL;
+    const url = `${host}/validate/healthcareprofessional/${prescriptionHealthcareActId}/${token}`;
+    const qrCodeDataUrl = await QRCode.toDataURL(url);
+
+    return res.status(201).json({ qrCodeDataUrl });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Erreur interne serveur.' });
+  }
 });
 
-/**
- * @route GET /qrcode/healthcareprofessional
- * @description Endpoint temporaire qui retourne simplement "ok"
- * @access Public ou protégé selon ton choix
- * 
- * @returns
- * - 200 : { message: "ok" }
- */
-router.get('/qrcode/healthcareprofessional', (req: any, res: any) => {
-  return res.status(200).json({ message: 'ok' });
+// Route 2 - Validation
+router.get('/validate/healthcareprofessional/:prescriptionHealthcareActId/:token', async (req: any, res: any) => {
+  try {
+    const { prescriptionHealthcareActId, token } = req.params;
+    const userId = req.userId;
+
+    const prescriptionAct = await PrescriptionHealthcareAct.findByPk(prescriptionHealthcareActId, {
+      include: [
+        { model: HealthcareAct },
+        {
+          model: Prescription,
+          include: [{ model: Patient, include: [User] }],
+        },
+      ],
+    });
+
+    if (!prescriptionAct) return res.status(404).json({ message: 'Prescription introuvable.' });
+
+    if (!prescriptionAct.Prescription || 
+        !prescriptionAct.Prescription.Patient ||
+        !prescriptionAct.Prescription.Patient.User
+    ) return res.status(404).json({ message: 'Problème durant la récupération des données.' });
+
+    if (prescriptionAct.Status === PrescriptionHealthcareactsStatus.PERFORMED) {
+      return res.status(400).json({ message: 'Ce soin a déjà été validé.' });
+    }
+
+    if (
+      !prescriptionAct.validateToken ||
+      prescriptionAct.validateToken !== token ||
+      !prescriptionAct.validateTokenLimitTime ||
+      new Date() > prescriptionAct.validateTokenLimitTime
+    ) {
+      return res.status(401).json({ message: 'Token invalide ou expiré.' });
+    }
+
+    // Vérifie si le soignant connecté est bien lié à l’acte
+    const professional = await HealthcareProfessional.findOne({
+      where: { UserId: userId },
+      include: ['Structures'],
+    });
+
+    if (!professional) return res.status(403).json({ message: 'Soignant non autorisé.' });
+
+    const patientStructureId = prescriptionAct.Prescription.Patient.StructureId!;
+    const professionalStructureIds = professional.Structures?.map((s) => s.Id);
+
+    if (!professionalStructureIds || !professionalStructureIds.includes(patientStructureId)) {
+      return res.status(403).json({ message: 'Vous n’êtes pas lié à ce patient.' });
+    }
+
+    await prescriptionAct.update({
+      Status: PrescriptionHealthcareactsStatus.PERFORMED,
+    });
+
+    const user = prescriptionAct.Prescription.Patient.User;
+    console.log(prescriptionAct)
+
+    return res.status(200).json({
+      message: 'Soin validé avec succès.',
+      healthcareAct: prescriptionAct.HealthcareAct?.Name,
+      patientName: `${user.FirstName} ${user.LastName}`,
+      validatedAt: new Date(),
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Erreur interne serveur.' });
+  }
 });
 
 export default router;

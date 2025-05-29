@@ -32,6 +32,9 @@
         <li *hasRole="RolesEnum.HEALTHCAREPROFESSIONAL" class="nav-item">
           <a class="nav-link" routerLink="/manage-acts">Manage Acts</a>
         </li>
+        <li *hasRole="RolesEnum.PATIENT" class="nav-item">
+          <a class="nav-link" routerLink="/patient/prescriptions">Patient Validate Acts</a>
+        </li>
         <li *hasRole="RolesEnum.STRUCTURE" class="nav-item">
           <a class="nav-link" routerLink="/create-prescription">Create Prescription</a>
         </li>

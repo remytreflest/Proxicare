@@ -16,7 +16,17 @@ const unprotectedPath = [
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.API_CORS || '',
+  origin: (origin, callback) => {
+    if (!origin) return callback(new Error('No origin provided'), false);
+
+    const allowedOrigins = process.env.API_CORS ?? [''];
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-UserId'],

@@ -1,0 +1,26 @@
+<div class="container py-5 text-center">
+
+  <ng-container *ngIf="statusType === 'success'">
+    <div class="card border-success p-4 mx-auto shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+        <h4 class="card-title text-success">Soin validé avec succès</h4>
+        <p class="card-text mt-2">
+          <strong>{{ healthcareActName }}</strong> pour <strong>{{ patientName }}</strong><br />
+          le {{ validatedAt | date: 'dd/MM/yyyy à HH:mm' }}
+        </p>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="statusType === 'error'">
+    <div class="card border-danger p-4 mx-auto shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-times-circle fa-3x text-danger mb-3"></i>
+        <h4 class="card-title text-danger">Erreur</h4>
+        <p class="card-text mt-2">{{ message }}</p>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

@@ -12,6 +12,9 @@ import { RegisterhealthcareprofessionalComponent } from '../components/register-
 import { CreatePrescriptionComponent } from '../pages/create-prescription/create-prescription.component';
 import { PrescriptionsToPlanComponent } from '../pages/prescriptions-to-plan/prescriptions-to-plan.component';
 import { RolesLoadedGuard } from '../guards/rolesLoadedGuard';
+import { ValidateActPatientComponent } from '../pages/validate-act-patient/validate-act-patient.component';
+import { PrescriptionsForPatientComponent } from '../pages/prescriptions-for-patient/prescriptions-for-patient.component';
+import { ValidateActHealthcareprofessionalComponent } from '../pages/validate-act-healthcareprofessional/validate-act-healthcareprofessional.component';
 
 export const routes: Routes = [
   {
@@ -63,5 +66,20 @@ export const routes: Routes = [
     component: PrescriptionsToPlanComponent,
     canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
   },
-  { path: '**', redirectTo: '' }
+  { 
+    path: 'patient/prescriptions', 
+    component: PrescriptionsForPatientComponent,
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.PATIENT)]
+  },
+  { 
+    path: 'validate-act/patient/:prescriptionHealthcareActId', 
+    component: ValidateActPatientComponent,
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.PATIENT)]
+  },
+  {
+    path: 'validate-act/healthcareprofessional/:prescriptionHealthcareActId/:token',
+    component: ValidateActHealthcareprofessionalComponent,
+    canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
+  }
+  // { path: '**', redirectTo: '' }
 ];
