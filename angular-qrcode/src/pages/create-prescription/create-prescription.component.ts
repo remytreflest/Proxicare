@@ -39,7 +39,10 @@ export class CreatePrescriptionComponent implements OnInit {
     this.acts.push(
       this.fb.group({
         id: ['', Validators.required],
-        occurrencesPerDay: [{ value: 1, disabled: true }, [Validators.required, Validators.min(1), Validators.max(1)]],
+        occurrencesPerDay: this.fb.control(
+          { value: 1, disabled: true },
+          [Validators.required, Validators.min(1), Validators.max(1)]
+        ),
       })
     );
   }
@@ -58,7 +61,7 @@ export class CreatePrescriptionComponent implements OnInit {
   onSubmit(): void {
     if (this.form.invalid) return;
 
-    this.http.post(`${environment.urls.back}/prescriptions`, this.form.value).subscribe({
+    this.http.post(`${environment.urls.back}/prescriptions`, this.form.getRawValue()).subscribe({
       next: () => {
         this.message = "Ajout de la prescription fait avec succès"
         this.form.reset();

@@ -1,28 +1,25 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { UserService } from '../services/userService';
-import { map, take } from 'rxjs/operators';
+import { timeout, catchError, map, take, filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RolesLoadedGuard implements CanActivate {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> {
+  ): Observable<boolean> {
+    console.log("RolesLoadedGuard")
     return this.userService.rolesLoaded$.pipe(
+      filter(loaded => loaded),
       take(1),
-      map(loaded => {
-        if (loaded) {
-          return true;
-        } else {
-          return state.url === '/' ? true : this.router.createUrlTree(['/']);
-        }
-      })
+      timeout(5000), // 5 secondes max
+      catchError(() => of(false))                 
     );
   }
 }

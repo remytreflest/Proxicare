@@ -70,8 +70,8 @@ router.get('/qrcode/patient/:prescriptionHealthcareActId', async (req: any, res:
       validateTokenLimitTime: limit,
     });
 
-    const host = process.env.SITE_ACCESS_BY_WIFI ? process.env.FRONT_URL_LOCAL : process.env.FRONT_URL;
-    const url = `${host}/validate/healthcareprofessional/${prescriptionHealthcareActId}/${token}`;
+    const host = process.env.LOCAL_IP_SAME_WIFI ? process.env.FRONT_URL_LOCAL : process.env.FRONT_URL;
+    const url = `${host}/validate-act/healthcareprofessional/${prescriptionHealthcareActId}/${token}`;
     const qrCodeDataUrl = await QRCode.toDataURL(url);
 
     return res.status(201).json({ qrCodeDataUrl });
@@ -84,6 +84,7 @@ router.get('/qrcode/patient/:prescriptionHealthcareActId', async (req: any, res:
 // Route 2 - Validation
 router.get('/validate/healthcareprofessional/:prescriptionHealthcareActId/:token', async (req: any, res: any) => {
   try {
+    console.log(req.params)
     const { prescriptionHealthcareActId, token } = req.params;
     const userId = req.userId;
 

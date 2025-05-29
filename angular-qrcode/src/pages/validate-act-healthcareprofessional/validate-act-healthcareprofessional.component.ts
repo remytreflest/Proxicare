@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environment';
 
 @Component({
   selector: 'app-validate-act-healthcareprofessional',
@@ -32,7 +33,7 @@ export class ValidateActHealthcareprofessionalComponent implements OnInit {
       return;
     }
 
-    this.http.get(`/api/validate/healthcareprofessional/${prescriptionHealthcareActId}/${token}`)
+    this.http.get(`${environment.urls.back}/validate/healthcareprofessional/${prescriptionHealthcareActId}/${token}`)
       .subscribe({
         next: (res: any) => {
           this.statusType = 'success';
@@ -42,6 +43,7 @@ export class ValidateActHealthcareprofessionalComponent implements OnInit {
           this.validatedAt = res.validatedAt;
         },
         error: (err: HttpErrorResponse) => {
+          console.log(err)
           this.statusType = 'error';
           this.message = err.error?.message || 'Une erreur est survenue.';
         }

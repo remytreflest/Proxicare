@@ -1,3 +1,6 @@
+# SECURITY
+*.pem
+
 # FRONT : Angular
 /angular-qrcode/dist
 /angular-qrcode/node_modules

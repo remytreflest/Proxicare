@@ -81,5 +81,4 @@ export const routes: Routes = [
     component: ValidateActHealthcareprofessionalComponent,
     canActivate: [RolesLoadedGuard, roleGuard(RolesEnum.HEALTHCAREPROFESSIONAL)]
   }
-  // { path: '**', redirectTo: '' }
 ];
