@@ -8,6 +8,7 @@ import { HealthcareAct } from '../../models/healthcareAct';
   selector: 'app-manage-acts',
   standalone: true,
   imports: [CommonModule],
+  styleUrl: './manage-acts.component.scss',
   templateUrl: './manage-acts.component.html',
 })
 export class ManageActsComponent implements OnInit {

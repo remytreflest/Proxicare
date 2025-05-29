@@ -8,6 +8,7 @@ import { PrescriptionHealthcareactsStatus } from '../../resources/prescriptionHe
 @Component({
   selector: 'app-prescriptions-to-plan',
   templateUrl: './prescriptions-to-plan.component.html',
+  styleUrl: './prescriptions-to-plan.component.scss',
   standalone: true,
   imports: [
     CommonModule,

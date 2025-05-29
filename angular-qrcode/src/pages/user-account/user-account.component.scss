@@ -1,0 +1,102 @@
+:host {
+  display: block;
+  padding: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+strong {
+  color: #1a1a1a;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid #dee2e6;
+
+  .nav-link {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    color: #007bff;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+
+    &.active {
+      color: #fff;
+      background-color: #007bff;
+      border-radius: 0.25rem 0.25rem 0 0;
+    }
+
+    &:hover:not(.active) {
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+  }
+}
+
+.tab-content {
+  background: #fff;
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tab-pane {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prescription-card {
+  border: 1px solid #ccc;
+  border-left: 4px solid #007bff;
+  background: #fafafa;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+}
+
+button.btn-primary {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .nav-tabs {
+    flex-direction: column;
+
+    .nav-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .tab-content {
+    padding: 1rem 0.5rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}

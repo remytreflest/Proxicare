@@ -1,0 +1,95 @@
+:host {
+  display: block;
+  padding: 1.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+h3 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #007bff;
+}
+
+.prescription-block {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.5rem;
+}
+
+.act-card {
+  background-color: #fdfdfd;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 5px solid #6c757d;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  &.status-to-be-planned {
+    border-left-color: #ffc107;
+    background-color: #fffbe6;
+  }
+
+  &.status-planned {
+    border-left-color: #28a745;
+    background-color: #e9f9ee;
+  }
+
+  &.status-cancelled {
+    border-left-color: #dc3545;
+    background-color: #fbeaea;
+  }
+
+  p {
+    margin: 0.25rem 0;
+  }
+
+  form {
+    margin-top: 0.75rem;
+  }
+}
+
+input.form-control {
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+}
+
+button.btn-outline-primary {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.9rem;
+  border-radius: 0.375rem;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .col, .col-auto {
+    width: 100%;
+  }
+
+  button.btn-outline-primary {
+    width: 100%;
+  }
+
+  h5 {
+    font-size: 1rem;
+  }
+
+  input.form-control {
+    font-size: 0.9rem;
+  }
+}

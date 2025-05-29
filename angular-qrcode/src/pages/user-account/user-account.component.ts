@@ -10,6 +10,7 @@ import { Prescription } from '../../models/prescription';
   selector: 'app-user-account',
   standalone: true,
   imports: [CommonModule],
+  styleUrl: './user-account.component.scss',
   templateUrl: './user-account.component.html',
 })
 export class UserAccountComponent implements OnInit {
