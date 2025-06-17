@@ -10,15 +10,30 @@ if (-not $ip) {
     exit 1
 }
 
-Write-Host "Adresse IP détectée : $ip"
+Write-Host "✅ Adresse IP détectée : $ip"
 
-# 2. Vérifier mkcert
-if (-not (Get-Command mkcert -ErrorAction SilentlyContinue)) {
-    Write-Host "mkcert non trouvé. Téléchargement..."
-    Invoke-WebRequest -Uri https://github.com/FiloSottile/mkcert/releases/latest/download/mkcert.exe -OutFile mkcert.exe
-    Move-Item mkcert.exe "$env:SystemRoot\System32\mkcert.exe" -Force
+# 2. Télécharger mkcert localement si non présent
+$mkcertPath = ".\mkcert.exe"
+if (-not (Test-Path $mkcertPath)) {
+    Write-Host "⬇️ mkcert non trouvé. Téléchargement en cours..."
+    try {
+        Invoke-WebRequest -Uri https://github.com/FiloSottile/mkcert/releases/latest/download/mkcert-v1.4.4-windows-arm64.exe -OutFile $mkcertPath -UseBasicParsing
+        Write-Host "✅ mkcert téléchargé avec succès."
+    } catch {
+        Write-Error "❌ Échec du téléchargement de mkcert.exe : $_"
+        exit 1
+    }
 } else {
-    Write-Host "mkcert déjà installé"
+    Write-Host "✅ mkcert déjà présent localement."
+}
+
+# 3. Installer le certificat racine s'il n'existe pas
+$rootCAPath = "$env:LOCALAPPDATA\mkcert\rootCA.pem"
+if (-not (Test-Path $rootCAPath)) {
+    Write-Host "🔐 Installation du certificat racine mkcert..."
+    & $mkcertPath -install
+} else {
+    Write-Host "🔐 Certificat racine déjà installé."
 }
 
 # 3. Générer les certificats si non présents
@@ -26,7 +41,7 @@ if (-not (Test-Path "$ip.pem")) {
     Write-Host "Génération du certificat SSL pour $ip"
     mkcert $ip
 } else {
-    Write-Host "Certificats déjà présents"
+    Write-Host "✅ Certificats déjà présents"
 }
 
 # 4. Modifier .env dans nodejs-api
