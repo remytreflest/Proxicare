@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core'; // useful for typechecking
+import { CalendarOptions, EventInput } from '@fullcalendar/core'; // useful for typechecking
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list';
+import { PlanningService } from '../../services/planningService';
 
 @Component({
   selector: 'app-calendar',
@@ -18,9 +19,12 @@ import listPlugin from '@fullcalendar/list';
 })
 export class CalendarComponent implements OnInit {
 
+  @Input() userID !: number | null | undefined;
+
   @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+
+  constructor(private breakpointObserver: BreakpointObserver, private planningService : PlanningService) {}
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -32,7 +36,7 @@ export class CalendarComponent implements OnInit {
             ...this.calendarOptions,
             initialView: 'listWeek',
             headerToolbar: {
-              left: 'title',
+              left: 'prev today next',
               center: '',
               right: 'listWeek,timeGridDay'
             }
@@ -54,6 +58,22 @@ export class CalendarComponent implements OnInit {
           this.calendarComponent?.getApi()?.updateSize();
         }, 100);
       });
+
+      this.planningService.getAppointementsByUserId(this.userID?.toString() ?? '').subscribe(a =>{
+        this.calendarOptions.events = a.map(appointement => ({
+          id: appointement.Id.toString(),
+          title: appointement.Title,
+          start: appointement.Start,
+          end: appointement.End,
+          extendedProps: {
+            caregiverId: appointement.CaregiverID,
+            patientId: appointement.PatientID,
+            description: appointement.Description,
+            acts: appointement.Acts,
+          },
+        } as EventInput));
+        
+      })
   }
   
 
@@ -69,7 +89,7 @@ export class CalendarComponent implements OnInit {
     nowIndicator: true,
 
     headerToolbar: {
-      left: 'title',
+      left: 'prev today next',
       center: '',
       right: 'listWeek,timeGridDay'
     },
@@ -88,13 +108,12 @@ export class CalendarComponent implements OnInit {
       }
 
       if(args.view.type === 'listWeek' || args.view.type === 'timeGridDay') {
-        return args.date.toLocaleDateString('fr-FR', {weekday:'long', month:'long', day:'2-digit' });
+        return args.date.toLocaleDateString('fr-FR', {weekday:'long', month:'long', day:'2-digit', year:'numeric' });
       }
       
       return args.date.toLocaleDateString('fr-FR', {weekday:'short', day:'2-digit' });
     },
     firstDay: 1,
-    
     
     dateClick: (arg) => this.handleDateClick(arg),
     events: [

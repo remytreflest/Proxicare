@@ -1,4 +1,7 @@
-<div class="calendar-container">
-    <full-calendar #fullcalendar [options]="calendarOptions"></full-calendar>
-</div>
-
+@if(userID && userID !== 0){
+    <div class="calendar-container">
+        <full-calendar #fullcalendar [options]="calendarOptions"></full-calendar>
+    </div>
+} @else {
+    <p class="error">Connectez-vous pour voir votre calendrier.</p>
+}
