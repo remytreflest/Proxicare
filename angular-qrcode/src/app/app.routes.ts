@@ -27,6 +27,6 @@ export const routes: Routes = [
   {
     path: 'planning',
     component: PlanningComponent,
-    //canActivate: [roleGuard(RolesEnum.ADMIN)]
+    canActivate: [roleGuard(RolesEnum.USER)]
   },
 ];

@@ -10,3 +10,24 @@
         width: 95%;
     }
 }
+
+::ng-deep .fc .fc-toolbar{
+    @media screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+        row-gap: 5px;
+    }
+}
+
+.error {
+  color: #d32f2f;              /* Rouge vif pour l'erreur */
+  background-color: #fddede;   /* Rouge très pâle pour le fond */
+  border: 1px solid #d32f2f;   /* Bordure rouge */
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  margin: 1rem 0;
+  font-size: 1rem;
+  width: 90vw;
+  display: flex;
+  justify-self: center;
+}
