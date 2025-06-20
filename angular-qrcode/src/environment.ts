@@ -1,7 +1,7 @@
 
 
-const LOCAL_IP_SAME_WIFI = true;
-const YOUR_IP = '192.168.1.19'; // ipconfig --> ipv4
+const LOCAL_IP_SAME_WIFI = false;
+const YOUR_IP = '169.254.161.99'; // ipconfig --> ipv4
 const host = LOCAL_IP_SAME_WIFI ? YOUR_IP : "localhost";
 
 const redirect_uri = `https://${host}:4200/`;

@@ -28,6 +28,7 @@ export class UserService {
       },
       error: (err) => {
         console.error('L\'utilisateur n\'existe pas et va être créé', err)
+        this.rolesLoadedSubject.next(true);
         this.router.navigate(['/register']);
       }
     });

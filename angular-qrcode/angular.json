@@ -77,9 +77,11 @@
             },
             "development": {
               "buildTarget": "angular-qrcode:build:development",
-              "sslCert": "./server.crt",
-              "sslKey": "./server.key",
-              "ssl": true
+              "ssl": true,
+              "sslKey": "../localhost-key.pem",
+              "sslCert": "../localhost.pem",
+              "host": "localhost",
+              "port": 4200
             }
           },
           "defaultConfiguration": "development"

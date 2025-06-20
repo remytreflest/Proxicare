@@ -19,7 +19,9 @@ export class RolesLoadedGuard implements CanActivate {
       filter(loaded => loaded),
       take(1),
       timeout(5000), // 5 secondes max
-      catchError(() => of(false))                 
+      catchError(() => {
+        return of(false)
+      })
     );
   }
 }
