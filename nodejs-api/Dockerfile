@@ -1,6 +1,6 @@
 FROM node:18
 WORKDIR /app
-COPY nodejs-api/ .
+COPY . .
 RUN npm install
 RUN npm run migrate
 EXPOSE 5000

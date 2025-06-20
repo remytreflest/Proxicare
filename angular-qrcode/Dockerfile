@@ -1,7 +1,7 @@
 # Étape 1 : build Angular
 FROM node:18 as builder
 WORKDIR /app
-COPY angular-qrcode/ .
+COPY . .
 RUN npm install && npm run build
 
 # Étape 2 : servir avec Nginx
