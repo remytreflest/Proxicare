@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { PrescriptionHealthcareactsStatus } from '../../resources/prescriptionHealthcareactsStatus';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-prescriptions-for-patient',

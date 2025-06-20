@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } fr
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-create-prescription',

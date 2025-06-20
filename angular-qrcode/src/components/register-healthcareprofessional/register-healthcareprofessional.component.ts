@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 import { enumToArray } from '../../herlpers/enumHelper';
 import { SpecialityEnum } from '../../resources/specialityEnum';
 import { CommonModule } from '@angular/common';

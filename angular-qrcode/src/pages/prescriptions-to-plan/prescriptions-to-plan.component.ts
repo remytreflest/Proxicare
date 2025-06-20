@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 import { CommonModule, DatePipe, NgClass } from '@angular/common';
 import { PrescriptionHealthcareactsStatus } from '../../resources/prescriptionHealthcareactsStatus';
 
@@ -65,7 +65,7 @@ export class PrescriptionsToPlanComponent implements OnInit {
   }
 
   planAppointment(act: any): void {
-    
+
     const form = this.formMap[act.Id];
     if (form.invalid) return;
 

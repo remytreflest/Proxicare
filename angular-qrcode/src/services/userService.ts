@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, firstValueFrom, map, Observable, of } from 'rxjs';
-import { environment } from '../environment';
+import { environment } from '../environments/environment';
 import { AuthService } from '@auth0/auth0-angular';
 import { RolesEnum } from '../resources/rolesEnum';
 import { User } from '../models/user';

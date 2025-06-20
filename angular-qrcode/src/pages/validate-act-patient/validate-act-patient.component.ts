@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { interval, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 
 @Component({
   standalone: true,

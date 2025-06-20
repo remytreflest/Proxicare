@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideAuth0 } from '@auth0/auth0-angular';
-import { environment } from '../environment';
+import { environment } from '../environments/environment';
 import { authInterceptor } from '../interceptors/auth.interceptor';
 import { UserService } from '../services/userService';
 

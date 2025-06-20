@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/userService';
 
@@ -19,7 +19,7 @@ export class RegisterPatientComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient, 
+    private http: HttpClient,
     private router: Router,
     private userService: UserService
   ) {}

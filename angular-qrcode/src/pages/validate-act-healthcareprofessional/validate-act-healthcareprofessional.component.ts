@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-validate-act-healthcareprofessional',

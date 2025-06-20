@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { User } from '../../models/user';
 import { Router } from '@angular/router';
@@ -21,7 +21,7 @@ export class UserAccountComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    
+
     // 1. Récupérer User
     this.http.get(`${environment.urls.back}/user`).subscribe({
       next: (data) => {
