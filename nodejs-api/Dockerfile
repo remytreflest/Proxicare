@@ -4,4 +4,4 @@ COPY . .
 RUN npm install
 RUN npm run migrate
 EXPOSE 5000
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["./entrypoint.sh"]
