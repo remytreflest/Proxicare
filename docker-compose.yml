@@ -13,7 +13,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
 
-  front:
+  angular-qrcode:
     build: ./angular-qrcode
     ports:
       - "80:80"
@@ -21,7 +21,7 @@ services:
       - api
     restart: always
 
-  api:
+  nodejs-api:
     build: ./nodejs-api
     ports:
       - "5000:5000"
