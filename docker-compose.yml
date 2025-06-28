@@ -45,10 +45,9 @@ services:
     ports:
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro 
       - ./nginx/cert.pem:/etc/ssl/certs/cert.pem:ro
       - ./nginx/key.pem:/etc/ssl/private/key.pem:ro
-      - /dev/null:/docker-entrypoint.d/10-listen-on-ipv6-by-default.sh:ro
     depends_on:
       - frontend
       - backend
