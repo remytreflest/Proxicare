@@ -35,6 +35,8 @@ services:
       - db
     environment:
       - NODE_ENV=production
+      - DB_HOST=db
+      - DB_PORT=5432
     restart: always
     networks:
       - internal
