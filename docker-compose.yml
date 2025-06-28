@@ -17,6 +17,7 @@ services:
 
   frontend:
     build: ./angular-qrcode
+    container_name: proxicare-frontend
     ports:
       - "4200:4200"
     depends_on:
@@ -27,6 +28,7 @@ services:
 
   backend:
     build: ./nodejs-api
+    container_name: proxicare-backend
     ports:
       - "5000:5000"
     depends_on:
