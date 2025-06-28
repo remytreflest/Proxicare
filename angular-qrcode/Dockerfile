@@ -7,4 +7,4 @@ RUN npm install && npm run build
 # Étape 2 : servir avec Nginx
 FROM nginx:alpine
 COPY --from=builder /app/dist/angular-qrcode /usr/share/nginx/html
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
