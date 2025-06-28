@@ -15,17 +15,17 @@ services:
     networks:
     - internal
 
-  angular-qrcode:
+  frontend:
     build: ./angular-qrcode
     ports:
       - "4200:4200"
     depends_on:
-      - nodejs-api
+      - backend
     restart: always
     networks:
       - internal
 
-  nodejs-api:
+  backend:
     build: ./nodejs-api
     ports:
       - "5000:5000"
@@ -47,8 +47,8 @@ services:
       - ./nginx/cert.pem:/etc/ssl/certs/cert.pem:ro
       - ./nginx/key.pem:/etc/ssl/private/key.pem:ro
     depends_on:
-      - angular-qrcode
-      - nodejs-api
+      - frontend
+      - backend
     networks:
       - internal
 
@@ -66,6 +66,6 @@ services:
 networks:
   internal:
     driver: bridge
-    
+
 volumes:
   pg_data:
