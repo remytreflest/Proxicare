@@ -14,7 +14,8 @@ app.use(express.json());
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin) return callback(new Error('No origin provided'), false);
+    //if (!origin) return callback(new Error('No origin provided'), false);
+    if (!origin) return callback(null, true);
 
     const allowedOrigins = process.env.API_CORS ?? [''];
 
