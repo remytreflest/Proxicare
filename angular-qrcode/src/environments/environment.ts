@@ -1,8 +1,8 @@
 
 
-const LOCAL_IP_SAME_WIFI = false;
-const YOUR_IP = '169.254.161.99'; // ipconfig --> ipv4
-const host = LOCAL_IP_SAME_WIFI ? YOUR_IP : "localhost";
+const DEPLOY_ON_VPS = true;
+const YOUR_IP = '193.168.145.61'; // ipconfig --> ipv4
+const host = DEPLOY_ON_VPS ? YOUR_IP : "localhost";
 
 const redirect_uri = `https://${host}:4200/`;
 const urls_back = `https://${host}:5000/api`;
