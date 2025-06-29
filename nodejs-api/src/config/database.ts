@@ -9,7 +9,7 @@ const user = process.env.POSTGRES_USER || '';
 const password = process.env.POSTGRES_PASSWORD || '';
 
 const sequelize = new Sequelize(db, user, password, {
-  host: 'localhost',
+  host: 'db',
   dialect: 'postgres',
   logging: false,
 });

@@ -4,7 +4,7 @@ require('dotenv').config();
 const client = new Client({
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
-  host: 'localhost',
+  host: 'db',
   port: 5432,
   database: 'postgres', // Connexion à postgres pour pouvoir créer une autre base
 });

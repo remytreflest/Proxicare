@@ -10,7 +10,7 @@ const config = {
     username: user,
     password: password,
     database: db,
-    host: 'localhost',
+    host: 'db',
     dialect: 'postgres',
   },
   // Ajoute production/test si nécessaire
