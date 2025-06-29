@@ -4,7 +4,7 @@ import { unless } from 'express-unless';
 const extractUserId = (req: any, res: any, next: NextFunction) => {
   const userIdHeader = req.header('X-Userid');
   if (!userIdHeader) {
-    return res.status(400).json({ message: 'Aucun utilisateur renseigné.' });
+    return res.status(400).json({ message: 'X-Userid Aucun utilisateur renseigné.' });
   }
 
   req.userId = userIdHeader;
