@@ -1,11 +1,6 @@
-
-
-const LOCAL_IP_SAME_WIFI = false;
-const YOUR_IP = '169.254.161.99'; // ipconfig --> ipv4
-const host = LOCAL_IP_SAME_WIFI ? YOUR_IP : "localhost";
-
-const redirect_uri = `https://${host}:4200/`;
-const urls_back = `https://${host}:5000/api`;
+const VPS_IP = '193.168.145.61';
+const redirect_uri = `https://${VPS_IP}/`;
+const urls_back = `https://${VPS_IP}/api`;
 
 export const environment = {
   production: true,
@@ -14,7 +9,7 @@ export const environment = {
     clientId: 'rdpDMcZUoYuM2EMvX5DmTw8WSSfUzPCn',
     authorizationParams: {
       redirect_uri: redirect_uri,
-      audience: 'https://localhost:5000/',
+      audience: 'https://193.168.145.61/',
       scope: 'openid email profile read write delete',
     },
   },
