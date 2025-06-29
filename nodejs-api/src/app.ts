@@ -29,6 +29,10 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-UserId'],
 }));
+
+app.get('/healthcheck', (req, res) => {
+  res.status(200).send('OK');
+});
   
 // SECURITE : Permet l'accès à l'API uniquement si un token personnalisé x-userid est présent
 app.use(extractUserId);
