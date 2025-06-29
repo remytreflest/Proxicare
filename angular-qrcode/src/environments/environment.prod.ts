@@ -9,7 +9,7 @@ export const environment = {
     clientId: 'rdpDMcZUoYuM2EMvX5DmTw8WSSfUzPCn',
     authorizationParams: {
       redirect_uri: redirect_uri,
-      audience: 'https://193.168.145.61/',
+      audience: 'https://localhost:5000/',
       scope: 'openid email profile read write delete',
     },
   },
