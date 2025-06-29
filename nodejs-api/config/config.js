@@ -13,7 +13,13 @@ const config = {
     host: 'db',
     dialect: 'postgres',
   },
-  // Ajoute production/test si nécessaire
+  production: {
+    username: user,
+    password: password,
+    database: db,
+    host: 'db',
+    dialect: 'postgres',
+  },
 };
 
 module.exports = config;
