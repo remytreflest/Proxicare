@@ -54,7 +54,7 @@ export const routes: Routes = [
   {
     path: 'planning',
     component: PlanningComponent,
-    canActivate: [RolesLoadedGuard, rolesAtLeastOneGuard([RolesEnum.PATIENT, RolesEnum.HEALTHCAREPROFESSIONAL])]
+    canActivate: [roleGuard(RolesEnum.USER)]
   },
   {
     path: 'create-prescription',
