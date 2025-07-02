@@ -34,7 +34,8 @@ User.init({
     allowNull: false,
     unique: true,
   },
-  Role: {
+  
+  Roles: {
     type: DataTypes.STRING(255),
     allowNull: false,
   }

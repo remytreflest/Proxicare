@@ -9,6 +9,10 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list';
 import { PlanningService } from '../../services/planningService';
+import { UserService } from '../../services/userService';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environment';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-calendar',
@@ -19,14 +23,20 @@ import { PlanningService } from '../../services/planningService';
 })
 export class CalendarComponent implements OnInit {
 
-  @Input() userID !: number | null | undefined;
-
   @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
 
+  user !: User;
 
-  constructor(private breakpointObserver: BreakpointObserver, private planningService : PlanningService) {}
+  constructor(private breakpointObserver: BreakpointObserver, private planningService : PlanningService, private http: HttpClient) {}
 
   ngOnInit(): void {
+    
+    this.http.get(`${environment.urls.back}/user`).subscribe({
+      next: (data) => {
+        this.user = data as User
+      }
+    });
+
     this.breakpointObserver
       .observe([Breakpoints.Handset])
       .subscribe(result => {
@@ -59,17 +69,16 @@ export class CalendarComponent implements OnInit {
         }, 100);
       });
 
-      this.planningService.getAppointementsByUserId(this.userID?.toString() ?? '').subscribe(a =>{
+      this.planningService.getAppointements().subscribe(a =>{
         this.calendarOptions.events = a.map(appointement => ({
           id: appointement.Id.toString(),
-          title: appointement.Title,
-          start: appointement.Start,
-          end: appointement.End,
+          title: this.user.FirstName + ' ' + this.user.LastName,
+          start: appointement.AppointementStartDate,
+          end: appointement.AppointementEndDate,
           extendedProps: {
-            caregiverId: appointement.CaregiverID,
-            patientId: appointement.PatientID,
-            description: appointement.Description,
-            acts: appointement.Acts,
+            caregiver: appointement.HealthcareProfessionnal,
+            patient: appointement.patient,
+            act: appointement.PrescriptionHealthcareAct,
           },
         } as EventInput));
         
@@ -125,4 +134,5 @@ export class CalendarComponent implements OnInit {
   handleDateClick(arg: DateClickArg) {
     alert('date click! ' + arg.dateStr)
   }
+
 }
