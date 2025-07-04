@@ -4,14 +4,14 @@ import { Patient } from "./patient";
 
 export interface Appointment {
   Id: number;
-  patient : Patient;
-  HealthcareProfessionnal : HealthcareProfessional;
+  PatientId : number;
+  HealthcareProfessionalId : number;
   Status: string;
-  AppointementStartDate: Date;
-  AppointementEndDate: Date;
+  AppointmentStartDate: Date;
+  AppointmentEndDate: Date;
   ValidateToken: string;
   ValidateTokenExpiration: Date;
   CreatedAt: Date;
   UpdatedAt: Date;
-  PrescriptionHealthcareAct : HealthcareAct;
+  PrescriptionHealthcareActId : number;
 }

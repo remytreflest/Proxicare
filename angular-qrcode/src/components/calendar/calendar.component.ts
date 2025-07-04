@@ -11,7 +11,7 @@ import listPlugin from '@fullcalendar/list';
 import { PlanningService } from '../../services/planningService';
 import { UserService } from '../../services/userService';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 import { User } from '../../models/user';
 
 @Component({
@@ -73,12 +73,12 @@ export class CalendarComponent implements OnInit {
         this.calendarOptions.events = a.map(appointement => ({
           id: appointement.Id.toString(),
           title: this.user.FirstName + ' ' + this.user.LastName,
-          start: appointement.AppointementStartDate,
-          end: appointement.AppointementEndDate,
+          start: appointement.AppointmentStartDate,
+          end: appointement.AppointmentEndDate,
           extendedProps: {
-            caregiver: appointement.HealthcareProfessionnal,
-            patient: appointement.patient,
-            act: appointement.PrescriptionHealthcareAct,
+            caregiver: appointement.HealthcareProfessionalId,
+            patient: appointement.PatientId,
+            act: appointement.PrescriptionHealthcareActId,
           },
         } as EventInput));
         
