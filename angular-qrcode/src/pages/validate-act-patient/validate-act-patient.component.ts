@@ -52,8 +52,14 @@ export class ValidateActPatientComponent implements OnInit, OnDestroy {
           }
         },
         error: (err: HttpErrorResponse) => {
-          this.statusMessage = err.error?.message || 'Une erreur est survenue.';
-          this.statusType = 'error';
+          if(err.status == 400 && err.error?.message == "Ce soin a déjà été validé.")
+          {
+            this.statusMessage = 'Votre soin a bien été validé.';
+            this.statusType = 'success';
+          } else {
+            this.statusMessage = err.error?.message || 'Une erreur est survenue.';
+            this.statusType = 'error';
+          }
           this.qrCodeDataUrl = null;
           this.intervalSub.unsubscribe();
         }
@@ -73,13 +79,13 @@ export class ValidateActPatientComponent implements OnInit, OnDestroy {
           }
         },
         error: (err: HttpErrorResponse) => {
-          if(err.status == 400)
+          if(err.status == 400 && err.error?.message == "Ce soin a déjà été validé.")
           {
             this.statusMessage = 'Votre soin a bien été validé.';
             this.statusType = 'success';
           } else {
-            this.statusMessage = 'Votre soin a bien été validé.';
-            this.statusType = 'success';
+            this.statusMessage = err.error?.message || 'Une erreur est survenue.';
+            this.statusType = 'error';
           }
           this.qrCodeDataUrl = null;
         }
