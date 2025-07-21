@@ -11,6 +11,7 @@ import { UserService } from '../../services/userService';
   standalone: true,
   templateUrl: './register-patient.component.html',
   imports: [CommonModule, ReactiveFormsModule],
+  styleUrl: './register-patient.component.scss'
 })
 export class RegisterPatientComponent implements OnInit {
   form!: FormGroup;
