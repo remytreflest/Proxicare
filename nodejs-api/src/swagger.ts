@@ -36,7 +36,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ['./Controllers/*.ts'],
+  apis: ['./src/Controllers/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
