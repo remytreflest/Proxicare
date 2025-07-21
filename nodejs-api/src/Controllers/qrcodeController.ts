@@ -12,7 +12,42 @@ import Appointment from '@/models/Appointment';
 
 const router = Router();
 
-// Route 1 - Génération du QR Code
+/**
+ * @swagger
+ * /qrcode/patient/{prescriptionHealthcareActId}:
+ *   get:
+ *     summary: Génère un QR code temporaire pour un soin en attente
+ *     tags: [QR Code]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: prescriptionHealthcareActId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de l'acte de prescription à valider
+ *     responses:
+ *       201:
+ *         description: QR Code généré avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 qrCodeDataUrl:
+ *                   type: string
+ *                   format: uri
+ *                   description: URL base64 du QR code
+ *       400:
+ *         description: Le soin est déjà validé, annulé ou non planifié
+ *       403:
+ *         description: L’utilisateur n’est pas le bon patient
+ *       404:
+ *         description: Soin introuvable
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get('/qrcode/patient/:prescriptionHealthcareActId', async (req: any, res: any) => {
   try {
     const { prescriptionHealthcareActId } = req.params;
@@ -81,7 +116,53 @@ router.get('/qrcode/patient/:prescriptionHealthcareActId', async (req: any, res:
   }
 });
 
-// Route 2 - Validation
+/**
+ * @swagger
+ * /validate/healthcareprofessional/{prescriptionHealthcareActId}/{token}:
+ *   get:
+ *     summary: Valide un soin par un professionnel de santé via un token
+ *     tags: [QR Code]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: prescriptionHealthcareActId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de l'acte de prescription à valider
+ *       - in: path
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Jeton temporaire de validation
+ *     responses:
+ *       200:
+ *         description: Soin validé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 healthcareAct:
+ *                   type: string
+ *                 patientName:
+ *                   type: string
+ *                 validatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Le soin est déjà validé ou token invalide/expiré
+ *       403:
+ *         description: Le soignant n’est pas lié au patient
+ *       404:
+ *         description: Données introuvables
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get('/validate/healthcareprofessional/:prescriptionHealthcareActId/:token', async (req: any, res: any) => {
   try {
     console.log(req.params)

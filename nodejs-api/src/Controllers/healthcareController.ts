@@ -6,12 +6,32 @@ import HealthcareAct from '@/models/HealthcareAct';
 const router = express.Router();
 
 /**
- * Associe un professionnel de santé à un acte de soin
- * @route POST /healthcare/act/healthcareprofessional
- * @body { 
- *  HealthcareProfessionalId, 
- *  HealthcareActId 
- * }
+ * @swagger
+ * /healthcare/act/healthcareprofessional:
+ *   post:
+ *     summary: Associe un professionnel de santé à un acte
+ *     tags: [Healthcare Acts]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [healthcareActId]
+ *             properties:
+ *               healthcareActId:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Association créée avec succès
+ *       400:
+ *         description: Données manquantes
+ *       404:
+ *         description: Professionnel ou acte introuvable
+ *       500:
+ *         description: Erreur serveur
  */
 router.post('/healthcare/act/healthcareprofessional', async (req: any, res: any) => {
   try {
@@ -45,9 +65,29 @@ router.post('/healthcare/act/healthcareprofessional', async (req: any, res: any)
 });
 
 /**
- * @route DELETE /healthcare/act/healthcareprofessional/:actId
- * @desc Supprime le lien entre un professionnel et un acte
- * @access Protégé
+ * @swagger
+ * /healthcare/act/healthcareprofessional/{actId}:
+ *   delete:
+ *     summary: Supprime l’association entre un professionnel et un acte
+ *     tags: [Healthcare Acts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: actId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de l’acte à dissocier
+ *     responses:
+ *       200:
+ *         description: Acte supprimé avec succès
+ *       400:
+ *         description: Paramètre invalide
+ *       404:
+ *         description: Acte introuvable ou déjà supprimé
+ *       500:
+ *         description: Erreur serveur
  */
 router.delete('/healthcare/act/healthcareprofessional/:actId', async (req: any, res: any) => {
   const userId = req.userId;
@@ -83,20 +123,34 @@ router.delete('/healthcare/act/healthcareprofessional/:actId', async (req: any, 
 });
 
 /**
- * @route POST /healthcare/act
- * @description Crée un nouvel acte de soin
- * @access Public
- * 
- * @body
- * - Name: string (requis) — nom unique de l'acte
- * - Description: string (requis)
- * - Price: number (requis) — tarif de l’acte
- * 
- * @returns
- * - 201 : Acte créé avec succès
- * - 400 : Champs requis manquants ou invalides
- * - 409 : Un acte avec ce nom existe déjà
- * - 500 : Erreur interne du serveur
+ * @swagger
+ * /healthcare/act:
+ *   post:
+ *     summary: Crée un nouvel acte de soin
+ *     tags: [Healthcare Acts]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, description, price]
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Acte de soin créé avec succès
+ *       400:
+ *         description: Champs requis manquants ou invalides
+ *       409:
+ *         description: Acte déjà existant
+ *       500:
+ *         description: Erreur serveur
  */
 router.post('/healthcare/act', async (req: any, res: any) => {
   const { name, description, price } = req.body;
@@ -131,13 +185,18 @@ router.post('/healthcare/act', async (req: any, res: any) => {
 });
 
 /**
- * @route GET /healthcare/acts
- * @description Récupère tous les actes de soins disponibles
- * @access Protégé
- * 
- * @returns
- * - 200 : Liste des actes de soins
- * - 500 : Erreur serveur
+ * @swagger
+ * /healthcare/acts:
+ *   get:
+ *     summary: Récupère tous les actes de soins disponibles
+ *     tags: [Healthcare Acts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des actes de soins
+ *       500:
+ *         description: Erreur serveur
  */
 router.get('/healthcare/acts', async (req: any, res: any) => {
   try {
@@ -149,9 +208,20 @@ router.get('/healthcare/acts', async (req: any, res: any) => {
 });
 
 /**
- * @route GET /healthcare/acts/user
- * @desc Retourne les actes de soin associés à un professionnel
- * @access Protégé
+ * @swagger
+ * /healthcare/acts/user:
+ *   get:
+ *     summary: Récupère les actes associés à un professionnel
+ *     tags: [Healthcare Acts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des actes liés au professionnel
+ *       404:
+ *         description: Professionnel non trouvé
+ *       500:
+ *         description: Erreur serveur
  */
 router.get('/healthcare/acts/user', async (req: any, res: any) => {
 

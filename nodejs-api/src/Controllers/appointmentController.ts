@@ -13,14 +13,20 @@ import { PrescriptionHealthcareactsStatus } from '@/resources/emuns/prescription
 const router = express.Router();
 
 /**
- * @route GET /appointments
- * @description Récupère tous les rendez-vous liés à l'utilisateur (en tant que patient et/ou professionnel)
- * @access Protégé
- * 
- * @returns
- * - 200 : Liste des rendez-vous
- * - 403 : Utilisateur inconnu
- * - 500 : Erreur interne
+ * @swagger
+ * /appointments:
+ *   get:
+ *     summary: Récupère tous les rendez-vous liés à l'utilisateur (patient ou professionnel)
+ *     tags: [Appointments]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des rendez-vous
+ *       403:
+ *         description: Utilisateur inconnu ou non autorisé
+ *       500:
+ *         description: Erreur serveur
  */
 router.get('/appointments', async (req: any, res: any) => {
   
@@ -64,17 +70,46 @@ router.get('/appointments', async (req: any, res: any) => {
 });
 
 /**
- * Crée un rendez-vous médical (Appointment)
- * @route POST /appointment
- * @body {
- *   patientId: number,
- *   healthcareProfessionalId: number,
- *   healthcareActId: number,
- *   status: string,
- *   appointmentStartDate: Date,
- *   appointmentEndDate: Date
- * }
- * @access Protégé
+ * @swagger
+ * /appointment:
+ *   post:
+ *     summary: Crée un rendez-vous médical
+ *     tags: [Appointments]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - patientId
+ *               - prescriptionHealthcareActId
+ *               - appointmentStartDate
+ *               - appointmentEndDate
+ *             properties:
+ *               patientId:
+ *                 type: integer
+ *               prescriptionHealthcareActId:
+ *                 type: integer
+ *               appointmentStartDate:
+ *                 type: string
+ *                 format: date-time
+ *               appointmentEndDate:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       201:
+ *         description: Rendez-vous créé
+ *       400:
+ *         description: Données invalides ou manquantes
+ *       403:
+ *         description: Professionnel non autorisé
+ *       404:
+ *         description: Patient, professionnel ou acte non trouvé
+ *       500:
+ *         description: Erreur serveur
  */
 router.post('/appointment', async (req: any, res: any) => {
     
@@ -173,19 +208,31 @@ router.post('/appointment', async (req: any, res: any) => {
 });
 
 /**
- * @route DELETE /appointment/:id
- * @description Supprime un rendez-vous à partir de son ID, si l'utilisateur est autorisé (soit le patient, soit le professionnel de santé concerné).
- * 
- * @access Protégé
- * 
- * @param {number} id - L'identifiant du rendez-vous à supprimer (passé en paramètre d'URL)
- * 
- * @returns
- * - 200 : Rendez-vous supprimé avec succès
- * - 400 : ID de rendez-vous invalide
- * - 403 : L'utilisateur n'est pas enregistré ou n'est pas lié au rendez-vous
- * - 404 : Rendez-vous non trouvé
- * - 500 : Erreur serveur
+ * @swagger
+ * /appointment/{id}:
+ *   delete:
+ *     summary: Supprime un rendez-vous
+ *     tags: [Appointments]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID du rendez-vous
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Rendez-vous supprimé
+ *       400:
+ *         description: ID invalide
+ *       403:
+ *         description: L'utilisateur n'est pas lié au rendez-vous
+ *       404:
+ *         description: Rendez-vous introuvable
+ *       500:
+ *         description: Erreur serveur
  */
 router.delete('/appointment/:id', async (req: any, res: any) => {
 

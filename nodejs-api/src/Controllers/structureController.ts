@@ -4,9 +4,24 @@ import { Structure } from '@/models/Structure';
 const router = express.Router();
 
 /**
- * @route GET /structures
- * @desc Retourne toutes les structures médicales
- * @access Protégé
+ * @swagger
+ * /structures:
+ *   get:
+ *     summary: Retourne toutes les structures médicales
+ *     tags: [Structures]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des structures
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Structure'
+ *       500:
+ *         description: Erreur interne du serveur
  */
 router.get('/structures', async (req: any, res: any) => {
   try {

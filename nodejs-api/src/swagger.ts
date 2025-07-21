@@ -14,6 +14,24 @@ const swaggerDefinition = {
       url: 'http://193.168.145.61:3000',
     },
   ],
+  tags: [
+  {
+    name: 'QR Code',
+    description: 'Génération et validation de soins via QR code'
+  },
+  {
+    name: 'Register',
+    description: 'Enregistrement de l\'utilisateur'
+  },
+  {
+    name: 'Prescriptions',
+    description: 'Gestion des prescriptions'
+  },
+  {
+    name: 'Healthcare Acts',
+    description: 'Gestion des actes de soins'
+  }
+]
 };
 
 const options = {

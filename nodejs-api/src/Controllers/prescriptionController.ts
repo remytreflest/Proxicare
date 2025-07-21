@@ -14,9 +14,48 @@ import Appointment from '@/models/Appointment';
 const router = express.Router();
 
 /**
- * @route POST /prescriptions
- * @desc Créer une prescription pour un patient et enregistre les actes associés
- * @access Protégé
+ * @swagger
+ * /prescriptions:
+ *   post:
+ *     summary: Crée une prescription et les actes associés pour un patient
+ *     tags: [Prescriptions]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [socialSecurityNumber, startDate, endDate, acts]
+ *             properties:
+ *               socialSecurityNumber:
+ *                 type: string
+ *               startDate:
+ *                 type: string
+ *                 format: date
+ *               endDate:
+ *                 type: string
+ *                 format: date
+ *               acts:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required: [id, occurrencesPerDay]
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     occurrencesPerDay:
+ *                       type: integer
+ *     responses:
+ *       201:
+ *         description: Prescription créée avec succès
+ *       400:
+ *         description: Champs requis manquants ou invalides
+ *       404:
+ *         description: Patient ou acte introuvable
+ *       500:
+ *         description: Erreur serveur
  */
 router.post('/prescriptions', async (req: any, res: any) => {
   try {
@@ -76,6 +115,24 @@ router.post('/prescriptions', async (req: any, res: any) => {
   }
 });
 
+/**
+ * @swagger
+ * /prescriptions/patient:
+ *   get:
+ *     summary: Récupère les prescriptions du patient connecté
+ *     tags: [Prescriptions]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des prescriptions
+ *       400:
+ *         description: Utilisateur non authentifié
+ *       403:
+ *         description: Aucun patient associé
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get('/prescriptions/patient', async (req: any, res: any) => {
   const userId = req.userId;
 
@@ -106,6 +163,24 @@ router.get('/prescriptions/patient', async (req: any, res: any) => {
   }
 });
 
+/**
+ * @swagger
+ * /prescriptions/healthcareprofessional:
+ *   get:
+ *     summary: Récupère les prescriptions des patients liés aux structures du soignant connecté
+ *     tags: [Prescriptions]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des prescriptions liées aux structures
+ *       400:
+ *         description: Utilisateur non authentifié
+ *       404:
+ *         description: Professionnel ou structure introuvable
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get('/prescriptions/healthcareprofessional', async (req: any, res: any) => {
   const userId = req.userId;
 

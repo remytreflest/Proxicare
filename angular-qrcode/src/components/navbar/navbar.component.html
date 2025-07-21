@@ -24,22 +24,22 @@
           <a class="nav-link" routerLink="/planning">Planning</a>
         </li>
         <li *hasRole="RolesEnum.ADMIN" class="nav-item">
-          <a class="nav-link" routerLink="/dashboard">Dashboard</a>
+          <a class="nav-link" routerLink="/dashboard">Tableau de Bord</a>
         </li>
         <li *hasRole="RolesEnum.USER" class="nav-item">
-          <a class="nav-link" routerLink="/account">Account</a>
+          <a class="nav-link" routerLink="/account">Compte</a>
         </li>
         <li *hasRole="RolesEnum.HEALTHCAREPROFESSIONAL" class="nav-item">
-          <a class="nav-link" routerLink="/manage-acts">Manage Acts</a>
+          <a class="nav-link" routerLink="/manage-acts">Gérer ses actes</a>
         </li>
         <li *hasRole="RolesEnum.PATIENT" class="nav-item">
-          <a class="nav-link" routerLink="/patient/prescriptions">Patient Validate Acts</a>
+          <a class="nav-link" routerLink="/patient/prescriptions">Validation de soins</a>
         </li>
         <li *hasRole="RolesEnum.STRUCTURE" class="nav-item">
-          <a class="nav-link" routerLink="/create-prescription">Create Prescription</a>
+          <a class="nav-link" routerLink="/create-prescription">Prescriptions</a>
         </li>
         <li *hasRole="RolesEnum.HEALTHCAREPROFESSIONAL" class="nav-item">
-          <a class="nav-link" routerLink="/prescriptions-to-plan">Prescription Plan</a>
+          <a class="nav-link" routerLink="/prescriptions-to-plan">Liste des soins</a>
         </li>
       </ul>
     </div>
