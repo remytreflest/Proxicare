@@ -4,8 +4,8 @@ import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { UserService } from '../../services/userService';
 import { AuthService } from '@auth0/auth0-angular';
-import { Router, RouterOutlet } from '@angular/router';
-import { take } from 'rxjs';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, take } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +16,19 @@ import { take } from 'rxjs';
 })
 export class AppComponent implements OnInit {
 
+  isHome: boolean = false;
+  
   constructor(
     private auth: AuthService,
     private userService: UserService,
     private router: Router
-  ) {}
+  ) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.isHome = event.urlAfterRedirects === '/';
+      });
+  }
 
   ngOnInit(): void {
     
