@@ -4,12 +4,17 @@ import cors from 'cors';
 import routes from '@/Controllers/base/baseController';
 import checkJwt from '@/middlewares/expressjwt.config';
 import extractUserId from '@/middlewares/extractUserId';
+import { setupSwagger } from '@/swagger';
 
 dotenv.config();
 
 const app = express();
 const AUTH_TOKEN_CHECK = checkJwt;
-  
+
+
+setupSwagger(app);
+
+
 app.use(express.json());
 
 app.use(cors({
